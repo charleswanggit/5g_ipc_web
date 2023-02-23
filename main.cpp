@@ -1,5 +1,5 @@
 /* ************************************************************************
- *    File Name:     main.c
+ *    File Name:     main.cpp
  *       Author:     zhongshupeng
  *         mail:     media_zsp@qq.com
  *      Company:     shinra
@@ -7,7 +7,10 @@
  *  Description:   
  ************************************************************************/
 #include "mongoose.h"
+#include "config.h"
+
 #include <stdio.h>
+#include <sys/time.h>
 
 #define ENUM_TYPE_CASE(x)           case x: return(#x)
 static const char* mg_ev_enum2strings(int ev)
@@ -36,6 +39,16 @@ static const char* mg_ev_enum2strings(int ev)
 
     }
     return "Not recognized ev";
+}
+
+// 获取程序运行时间
+uint64_t utils_get_us()
+{
+    struct timeval tv;
+    gettimeofday(&tv,NULL);
+    uint64_t now = tv.tv_sec * 1000000LL + tv.tv_usec;
+    static uint64_t timeorigin = 0;
+    return ( now - timeorigin );
 }
 
 
@@ -81,55 +94,44 @@ static struct user_info *getuser(struct mg_http_message *hm) {
   return NULL;
 }
 
-void fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
-  if (ev == MG_EV_HTTP_MSG) {
-    struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-    struct user_info *u = getuser(hm);
-    if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
-      // All URIs starting with /api/ must be authenticated
-      mg_http_reply(c, 403, "", "Denied\n");
-    } else if (mg_http_match_uri(hm, "/api/data")) {
-      mg_http_reply(c, 200, "Content-Type: application/json\r\n",
-                    "{%Q:%Q,%Q:%Q}\n", "text", "Hello!", "data", "somedata");
-    } else if (mg_http_match_uri(hm, "/api/login")) {
-      mg_http_reply(c, 200, "Content-Type: application/json\r\n",
-                    "{%Q:%Q,%Q:%Q}\n", "user", u->name, "token", u->token);
-    } else {
-      struct mg_http_serve_opts opts = {.root_dir = "web_root"};
-      mg_http_serve_dir(c, ev_data, &opts);
-    }
-  }
-  (void) fn_data;
-}
-
-static void dynamic_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
-  if (ev == MG_EV_HTTP_MSG) {
-    struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-    if (mg_http_match_uri(hm, "/api/sum")) {
-      // Attempt to fetch parameters from the body, hm->body
-      struct mg_str params = hm->body;
-      double num1, num2;
-      if (mg_json_get_num(params, "$[0]", &num1) &&
-          mg_json_get_num(params, "$[1]", &num2)) {
-        // Success! create a JSON response
-        mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%g}\n",
-                      "result", num1 + num2);
-      } else {
-        mg_http_reply(c, 500, NULL, "%s", "Parameters missing");
-      }
-    } else {
-      mg_http_reply(c, 500, NULL, "%s", "Invalid URI");
-    }
-  }
-}
-
 static void dir_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
     struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir
-    if (ev == MG_EV_HTTP_MSG) mg_http_serve_dir(c, ev_data, &opts);
+    //struct mg_http_serve_opts opts = {.root_dir = "./HTML_Study"};   // Serve local dir
+    if (ev == MG_EV_HTTP_MSG) mg_http_serve_dir(c, (mg_http_message *)ev_data, &opts);
 }
 
-static void zsp_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
-    struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir_fn
+static int apply_config()
+{
+    MG_INFO(("apply_config"));
+    int value;
+
+    int bit_rate_map[] = {2, 4, 8, 12, 16, 20}; //Mbps
+    value = config_get(CONFIG_BIT_RATE);
+    if (0 < value && value < (int)(sizeof(bit_rate_map) / sizeof(bit_rate_map[0]))) {
+        printf("CONFIG_BIT_RATE: %d Mbps\n", bit_rate_map[value]);
+    }
+
+    int resolution_map[] = {720, 1080, 1440};
+    value = config_get(CONFIG_RESOLUTION);
+    if (0 < value && value < (int)(sizeof(resolution_map) / sizeof(resolution_map[0]))) {
+        printf("CONFIG_RESOLUTION: %dp\n", resolution_map[value]);
+    }
+
+    // 0:open 1:close
+    value = config_get(CONFIG_HORIZONTAL_IMAGE);
+    // 0:open 1:close
+    value = config_get(CONFIG_VERTICAL_IMAGE);
+    value = config_get(CONFIG_COLOR_MODE);
+    value = config_get(CONFIG_WHITE_LIGHT);
+    // 0:open 1:close
+    value = config_get(CONFIG_RECORD);
+    // 0:open 1:close
+    value = config_get(CONFIG_NTP);
+    return 0;
+}
+
+static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
+    //struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir_fn
     if (ev == MG_EV_POLL) {
         return;
     }
@@ -138,11 +140,68 @@ static void zsp_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data
     if (ev == MG_EV_HTTP_MSG) {
         struct mg_http_message *hm = (struct mg_http_message *) ev_data;
         struct user_info *u = getuser(hm);
-        MG_INFO(("msg: %s\n", hm->message.ptr));
-        if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
+        MG_INFO(("http: \n%s\n", hm->message.ptr));
+        if (mg_http_match_uri(hm, "/api/fn3")) {
+            MG_INFO(("zsppp test fn3 ##############################\n"));
+            struct mg_str *host;
+            host = mg_http_get_header(hm, "Host");
+            if (host) {
+                MG_INFO(("zsppp host:%s\n", host->ptr));
+                printf("host end\n");
+            }
+            //mg_http_reply(c, 301, "Location: /web_root\r\n", "test /web_root\n");
+            //mg_http_reply(c, 200, "Content-Type: text/plain;charset=UTF-8\r\n", "/web_root\n");
+            //mg_http_reply(c, 200, "Content-Type: application/json\r\n ", "{%Q:\"%s\"}\n",
+            //              "url", "web_root");
+            mg_http_reply(c, 200, "Content-Type: application/json\r\n", "%s", config_get_json().c_str());
+            printf("\n%s\n", config_get_json().c_str());
+
+
+            //struct mg_http_serve_opts opts = {.root_dir = "./web_root"};   // Serve local dir
+            //mg_http_serve_dir(c, ev_data, &opts);
+        }
+        else if (mg_http_match_uri(hm, "/api/submit")) {
+            printf("body:\n%s\n", hm->body.ptr);
+            int ret = 0;
+            ret = config_set_json(hm->body.ptr);
+            ret |= apply_config();
+            if (ret == 0) {
+                mg_http_reply(c, 200, "", "set OK!\n");
+            }
+            else {
+                mg_http_reply(c, 403, "", "set error!\n");
+            }
+        }
+
+        else if (mg_http_match_uri(hm, "/api/f1")) {
+            mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%ld}\n",
+                          "result", utils_get_us()/1000000);
+        }
+        else if (mg_http_match_uri(hm, "/api/sum")) {
+            // Attempt to fetch a JSON array from the body, hm->body
+            struct mg_str json = hm->body;
+            double num1, num2;
+            MG_INFO(("test /api/sum\n"));
+            if (mg_json_get_num(json, "$[0]", &num1) &&
+                mg_json_get_num(json, "$[1]", &num2)) {
+                // Success! create a JSON response
+                mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%g}\n",
+                              "result", num1 + num2);
+                MG_INFO(("sum %lf + %lf = %lf\n", num1, num2, num1+num2));
+            }
+        }
+        else if (mg_http_match_uri(hm, "/api/param")) {
+        }
+
+//用户认证
+#if 1
+        else if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
+            MG_INFO(("zsppp denied ##############################\n"));
             // All URIs starting with /api/ must be authenticated
             mg_http_reply(c, 403, "", "Denied\n");
+            return;
         }
+#endif
         else if (mg_http_match_uri(hm, "/api/data")) {
             mg_http_reply(c, 200, "Content-Type: application/json\r\n",
                           "{%Q:%Q,%Q:%Q}\n", "text", "Hello!", "data", "somedata");
@@ -153,39 +212,24 @@ static void zsp_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data
         }
 
 
-        else if (mg_http_match_uri(hm, "/api/f1")) {
-            mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%d}\n",
-                          "result", 123);
-        }
-        else if (mg_http_match_uri(hm, "/api/sum")) {
-            // Attempt to fetch a JSON array from the body, hm->body
-            struct mg_str json = hm->body;
-            double num1, num2;
-            if (mg_json_get_num(json, "$[0]", &num1) &&
-                mg_json_get_num(json, "$[1]", &num2)) {
-                // Success! create a JSON response
-                mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%g}\n",
-                              "result", num1 + num2);
-            }
-
-
-        }
         else {
+            MG_INFO(("zsppp unknow uri\n"));
             struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir
-            mg_http_serve_dir(c, ev_data, &opts);
+            mg_http_serve_dir(c, (mg_http_message*)ev_data, &opts);
         }
     }
     else {
-        //MG_INFO(("zsppp unknow\n"));
     }
-    }
+}
 
 
 int main(int argc, char *argv[]) {
+    config_load();
+
     struct mg_mgr mgr;
     mg_mgr_init(&mgr);                                        // Init manager
-    mg_http_listen(&mgr, s_listening_address, zsp_fn, &mgr);  // Setup listener
-    //mg_http_listen(&mgr, s_listening_address, dynamic_fn, &mgr);  // Setup listener
+    //mg_http_listen(&mgr, s_listening_address, dir_fn, &mgr);  // Setup listener
+    mg_http_listen(&mgr, s_listening_address, web_settings_fn, &mgr);  // Setup listener
 
     MG_INFO(("Mongoose version : v%s", MG_VERSION));
     MG_INFO(("Listening on     : %s", s_listening_address));

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+        <meta name="Author" content="">
+        <meta name="Keywords" content="厉害很厉害" />
+        <meta name="Description" content="兆驰股份深耕制造业十逾年,秉承“工匠精神”的理念和实质,不断为实现“成为受到全球消费者尊敬的中国企业”这一愿景奋斗。" />
+        <title>Settings</title>
+    </head>
+
+    <body>
+    
+        <div class="row">
+            <H1>配置界面 demo</H1>
+        </div>
+        <div class="row">
+            <H2>Web Settings</H2>
+        </div>
+        <p>
+            <span id="bit_rate">码流设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_bit_rate">
+                <option>2Mbps</option>
+                <option>4Mbps</option>
+                <option>8Mbps</option>
+                <option>12Mbps</option>
+                <option>16Mbps</option>
+                <option>20Mbps</option>
+            </select>
+        </p>
+        <p>
+            <span id="resolution">分辨率设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_resolution">
+                <option>720p</option>
+                <option>1080p</option>
+                <option>1440p</option>
+            </select>
+        </p>
+        <p>
+            <span id="horizontal_image">水平镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_horizontal_image">
+                <option>开</option>
+                <option>关</option>
+            </select>
+        </p>
+        <p>
+            <span id="vertical_image">垂直镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_vertical_image">
+                <option>开</option>
+                <option>关</option>
+            </select>
+        </p>
+        <p>
+            <span id="color_mode">黑白模式</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_color_mode">
+                <option>自动</option>
+                <option>彩色</option>
+                <option>黑白</option>
+            </select>
+        </p>
+        <p>
+            <span id="white_light">白光灯</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_white_light">
+                <option>自动</option>
+                <option>打开</option>
+                <option>关闭</option>
+            </select>
+        </p>
+        <p title="开的话按最高分辨率、最低帧率进行TF卡录像。">
+            <span id="record">本地录像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_record">
+                <option>开</option>
+                <option>关</option>
+            </select>
+        </p>
+        <p>
+            <span id="ntp">时间同步</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_ntp">
+                <option>开</option>
+                <option>关</option>
+            </select>
+        </p>
+
+        <br></br>
+        <br></br>
+        <button id="btn_submit">Submit</button>
+        <br></br>
+        </div>
+        <hr />
+        <br></br>
+    
+        <div>
+            <b>12.下拉选择表单</b>
+            <br></br>
+            选择你的幸运数字
+            <br></br>
+            <select id="luck_select">
+                <option>114514</option>
+                <option>2233</option>
+                <option selected="">777</option>
+            </select>
+            <br></br>
+        </div>
+        <hr />
+        <div>
+            <p>
+        <span id="info1"></span>&nbsp;&nbsp;&nbsp;<span id="value1"></span>&nbsp;&nbsp;&nbsp;<select id="select1">
+            <option>2Mbps</option>
+            <option>4Mbps</option>
+            <option>8Mbps</option>
+            <option>12Mbps</option>
+            <option>16Mbps</option>
+            <option>20Mbps</option>
+        </select>
+        </p>
+        <p>
+        <span id="info2"></span>&nbsp;&nbsp;&nbsp;<span id="value2"></span>&nbsp;&nbsp;&nbsp;<select id="select2">
+            <option>2Mbps</option>
+            <option>2Mbps</option>
+        </select>
+        </p>
+        <span id="info3"></span>&nbsp;&nbsp;&nbsp;<span id="value3"></span>
+        <br></br>
+        <hr />
+        <br></br>
+        <div>
+
+            <div style="margin: 0.5em 0;">
+                <input id="text1" type='text' placeholder='input1' style="width: 10%;"
+                                                                   oninput="zsp_fun()" value=101 />
+            </div>
+            <div style="margin: 0.5em 0;">
+                <input id="text2" type='text' placeholder='input2' style="width: 10%;"
+                                                                   oninput="zsp_fun()" value=102 />
+            </div>
+
+            <button id="btn1">Call F1</button>
+            <button id="btn2">Call SUM(input1, ${input2})</button>
+            <button id="btn3">zsp test</button>
+            <div style="margin-top: 1em;">Action log:</div>
+            <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
+        </div>
+
+        <script type="module" src="main.js"></script>
+    </body>
+
+</html>

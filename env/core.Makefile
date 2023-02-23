@@ -142,7 +142,7 @@ endif
 endif
 
 #编译结束后的处理
-	$(STRIP) $(BIN)
+#$(STRIP) $(BIN)
 	$(DONE)
 	@echo '... done'
 	@echo
