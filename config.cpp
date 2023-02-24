@@ -50,6 +50,7 @@ static const config_t g_config_list[] =
     {0, 3, ENUM_TYPE_AND_STRING(CONFIG_WHITE_LIGHT)},
     {0, 2, ENUM_TYPE_AND_STRING(CONFIG_RECORD)},
     {0, 2, ENUM_TYPE_AND_STRING(CONFIG_NTP)},
+    {554, 65536, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT)},
 };
 
 //static const char g_config_path[] = "/etc/config/sc1a03_config.json";
@@ -92,21 +93,24 @@ int config_set_json(std::string json_str)
 
     Json::Value::Members mem = root.getMemberNames();
     for (auto iter = mem.begin(); iter != mem.end(); iter++) {
-        if (root[*iter].type() != Json::intValue) {
-            printf("json type error! %s\n", (*iter).c_str());
-            continue;
-        }
         tmp = g_json_root.get((*iter).c_str(), Json::Value::nullSingleton());
         if (tmp != Json::Value::nullSingleton()) {
 
             for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
                 if (g_config_list[i].item_name == (*iter) &&
+                    root[*iter].type() == Json::intValue &&
                     0 <= root[*iter].asInt() &&
                     root[*iter].asInt() < g_config_list[i].range_value) {
                     printf("%s : %d\n", (*iter).c_str(), root[*iter].asInt());       // 打印键名
-                    g_json_root[(*iter).c_str()] = root[*iter].asInt();
+                    //g_json_root[(*iter).c_str()] = root[*iter].asInt();
+                    g_json_root[(*iter).c_str()] = root[*iter];
 
                 }
+                else if (g_config_list[i].item_name == (*iter) &&
+                    root[*iter].type() == Json::stringValue) {
+                    g_json_root[(*iter).c_str()] = root[*iter];
+                }
+
             }
         }
         else {
@@ -135,8 +139,6 @@ int config_load()
     for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
         tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_value));
         g_json_root[g_config_list[i].item_name] = tmp;
-        //std::cout << g_config_list[i].item_name << " : " << g_json_root[g_config_list[i].item_name].type() << std::endl;
-        //std::cout << g_config_list[i].item_name << " " << g_config_list[i].default_value << std::endl;
     }
 
     //Json::Value xx = g_json_root.get("serial", Json::Value(114514));

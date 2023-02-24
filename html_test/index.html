@@ -8,114 +8,83 @@
         <meta name="Keywords" content="厉害很厉害" />
         <meta name="Description" content="兆驰股份深耕制造业十逾年,秉承“工匠精神”的理念和实质,不断为实现“成为受到全球消费者尊敬的中国企业”这一愿景奋斗。" />
         <title>Settings</title>
+        <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
-    
-        <div class="row">
-            <H1>配置界面 demo</H1>
+        <div id="login">
         </div>
-        <div class="row">
-            <H2>Web Settings</H2>
-        </div>
-        <p>
-            <span id="bit_rate">码流设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_bit_rate">
-                <option>2Mbps</option>
-                <option>4Mbps</option>
-                <option>8Mbps</option>
-                <option>12Mbps</option>
-                <option>16Mbps</option>
-                <option>20Mbps</option>
-            </select>
-        </p>
-        <p>
-            <span id="resolution">分辨率设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_resolution">
-                <option>720p</option>
-                <option>1080p</option>
-                <option>1440p</option>
-            </select>
-        </p>
-        <p>
-            <span id="horizontal_image">水平镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_horizontal_image">
-                <option>开</option>
-                <option>关</option>
-            </select>
-        </p>
-        <p>
-            <span id="vertical_image">垂直镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_vertical_image">
-                <option>开</option>
-                <option>关</option>
-            </select>
-        </p>
-        <p>
-            <span id="color_mode">黑白模式</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_color_mode">
-                <option>自动</option>
-                <option>彩色</option>
-                <option>黑白</option>
-            </select>
-        </p>
-        <p>
-            <span id="white_light">白光灯</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_white_light">
-                <option>自动</option>
-                <option>打开</option>
-                <option>关闭</option>
-            </select>
-        </p>
-        <p title="开的话按最高分辨率、最低帧率进行TF卡录像。">
-            <span id="record">本地录像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_record">
-                <option>开</option>
-                <option>关</option>
-            </select>
-        </p>
-        <p>
-            <span id="ntp">时间同步</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_ntp">
-                <option>开</option>
-                <option>关</option>
-            </select>
-        </p>
+        <div id="main_page" style="display: none">
+            <div class="row">
+                <H1>配置界面 demo</H1>
+            </div>
+            <div class="row">
+                <H2>摄像头配置</H2>
+                <p>
+                <span id="bit_rate">码流设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_bit_rate">
+                    <option>2Mbps</option>
+                    <option>4Mbps</option>
+                    <option>8Mbps</option>
+                    <option>12Mbps</option>
+                    <option>16Mbps</option>
+                    <option>20Mbps</option>
+                </select>
+                </p>
+                <p>
+                <span id="resolution">分辨率设置</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_resolution">
+                    <option>720p</option>
+                    <option>1080p</option>
+                    <option>1440p</option>
+                </select>
+                </p>
+                <p>
+                <span id="horizontal_image">水平镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_horizontal_image">
+                    <option>开</option>
+                    <option>关</option>
+                </select>
+                </p>
+                <p>
+                <span id="vertical_image">垂直镜像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_vertical_image">
+                    <option>开</option>
+                    <option>关</option>
+                </select>
+                </p>
+                <p>
+                <span id="color_mode">黑白模式</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_color_mode">
+                    <option>自动</option>
+                    <option>彩色</option>
+                    <option>黑白</option>
+                </select>
+                </p>
+                <p>
+                <span id="white_light">白光灯</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_white_light">
+                    <option>自动</option>
+                    <option>打开</option>
+                    <option>关闭</option>
+                </select>
+                </p>
+                <p title="开的话按最高分辨率、最低帧率进行TF卡录像。">
+                <span id="record">本地录像</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_record">
+                    <option>开</option>
+                    <option>关</option>
+                </select>
+                </p>
+                <p>
+                <span id="ntp">时间同步</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="select_ntp">
+                    <option>开</option>
+                    <option>关</option>
+                </select>
+                </p>
+                <p><label>RTSP port</label><input id="rtsp_port" type="text" maxlength="5"></p>
 
-        <br></br>
-        <br></br>
-        <button id="btn_submit">Submit</button>
-        <br></br>
-        </div>
-        <hr />
-        <br></br>
-    
-        <div>
-            <b>12.下拉选择表单</b>
-            <br></br>
-            选择你的幸运数字
-            <br></br>
-            <select id="luck_select">
-                <option>114514</option>
-                <option>2233</option>
-                <option selected="">777</option>
-            </select>
-            <br></br>
-        </div>
-        <hr />
-        <div>
-            <p>
-        <span id="info1"></span>&nbsp;&nbsp;&nbsp;<span id="value1"></span>&nbsp;&nbsp;&nbsp;<select id="select1">
-            <option>2Mbps</option>
-            <option>4Mbps</option>
-            <option>8Mbps</option>
-            <option>12Mbps</option>
-            <option>16Mbps</option>
-            <option>20Mbps</option>
-        </select>
-        </p>
-        <p>
-        <span id="info2"></span>&nbsp;&nbsp;&nbsp;<span id="value2"></span>&nbsp;&nbsp;&nbsp;<select id="select2">
-            <option>2Mbps</option>
-            <option>2Mbps</option>
-        </select>
-        </p>
-        <span id="info3"></span>&nbsp;&nbsp;&nbsp;<span id="value3"></span>
+                <br></br>
+                <br></br>
+                <button id="btn_submit">Submit</button>
+                <br></br>
+            </div>
         <br></br>
         <hr />
-        <br></br>
+
         <div>
 
             <div style="margin: 0.5em 0;">
@@ -134,7 +103,117 @@
             <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
         </div>
 
+        <table>
+            <tr>
+                <td>千古壹号</td>
+                <td>23</td>
+                <td>男</td>
+                <td>黄冈</td>
+            </tr>
+
+            <tr>
+                <td>许嵩</td>
+                <td>29</td>
+                <td>男</td>
+                <td>安徽</td>
+            </tr>
+
+            <tr>
+                <td>邓紫棋</td>
+                <td>23</td>
+                <td>女</td>
+                <td>香港</td>
+            </tr>
+
+        </table>
+
+        <dl>
+            <dt>第一条</dt>
+            <dd>你若是觉得你有实力和我玩，良辰不介意奉陪到底</dd>
+            <dd>我会让你明白，我从不说空话</dd>
+            <dd>我是本地的，我有一百种方式让你呆不下去；而你，无可奈何</dd>
+
+            <dt>第二条</dt>
+            <dd>良辰最喜欢对那些自认能力出众的人出手</dd>
+            <dd>你可以继续我行我素，不过，你的日子不会很舒心</dd>
+            <dd>你只要记住，我叫叶良辰</dd>
+            <dd>不介意陪你玩玩</dd>
+            <dd>良辰必有重谢</dd>
+
+        </dl>
+        <br></br>
+        <div class="bConfLCnt bConfLBC">
+            <h1 class="bMdelTitle">网络状态</h1>
+            <div id="netStateLCon" class="menuCon" style="overflow: hidden;">
+                <div id="bsDisableDiv" class="disNone" style="display: none;">
+                    <ul id="netStateHostNet" class="netStateMenuItem">
+                        <i class="wifiLogo" id="wifiLogo1677075960083"></i>
+                        <li>
+                            <span class="wifiModelName">2.4G网络</span>
+                            <div id="hostSwitch" class="switchCon switchConNetState">
+                                <i class="switchBg"></i>
+                                <i class="switchBall"></i>
+                            </div>
+                            <span id="hostSwitchDes"></span>
+                        </li>
+                        <li><label>已连设备：</label><span id="hostWifiNum2G">3个</span></li>
+                        <li><label>名称</label><input id="hostWifiName" type="text" maxlength="32"></li>
+                        <li><label>密码</label><input id="hostWifiPwd" type="text" maxlength="63"></li>
+                        <li class="bottom"><input id="hostWifiSave2G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                    </ul>
+                    <ul class="netStateMenuItem">
+                        <i class="wifiLogo"></i>
+                        <li>
+                            <span class="wifiModelName">5G网络</span>
+                            <div id="hostSwitch5G" class="switchCon switchConNetState">
+                                <i class="switchBg"></i>
+                                <i class="switchBall"></i>
+                            </div>
+                            <span id="hostSwitchDes5G"></span>
+                        </li>
+                        <li><label>已连设备：</label><span id="hostWifiNum5G">1个</span></li>
+                        <li><label>名称</label><input id="hostWifiName5G" type="text" maxlength="32"></li>
+                        <li><label>密码</label><input id="hostWifiPwd5G" type="text" maxlength="63"></li>
+                        <li class="bottom"><input id="hostWifiSave5G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                    </ul>
+                </div>
+                <div id="bsEnableDiv" class="disNone" style="display: block;">
+                    <ul class="netStateMenuItem">
+                        <i class="wifiLogo"></i>
+                        <li>
+                            <span class="wifiModelName">主人网络</span>
+                            <div id="hostSwitchBs" class="switchCon switchConNetState">
+                                <i class="switchBg"></i>
+                                <i class="switchBall" style="left: 18px; background: url(&quot;../web-static/images/routerBg.png&quot;) -441px -53px no-repeat;"></i>
+                            </div>
+                            <span id="hostSwitchDesBs">已开启</span>
+                        </li>
+                        <li><label>已连设备：</label><span id="hostWifiNumBs">4个</span></li>
+                        <li><label>名称</label><input id="hostWifiNameBs" type="text" maxlength="32"></li>
+                        <li><label>密码</label><input id="hostWifiPwdBs" type="text" maxlength="63"></li>
+                        <li class="bottom"><input id="hostWifiSaveBs" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                    </ul>
+                </div>
+                <ul id="netStateGuestNet" class="netStateMenuItem disNone" style="display: block;">
+                    <i class="wifiLogo"></i>
+                    <li>
+                        <span class="wifiModelName">访客网络</span>
+                        <div id="guestSwitch" class="switchCon switchConNetState">
+                            <i class="switchBg"></i>
+                            <i class="switchBall" style="left: 0px; background: url(&quot;../web-static/images/routerBg.png&quot;) -424px -52px no-repeat;"></i>
+                        </div>
+                        <span id="guestSwitchDes">未开启</span>
+                    </li>
+                    <li><label>已连设备：</label><span id="guestWifiNum">0个</span></li>
+                    <li><label>名称</label><input id="guestWifiName" type="text" maxlength="32"></li>
+                    <li><label>密码</label><input id="guestWifiPwd" type="text" maxlength="63"></li>
+                    <li class=""><input id="guestWifiSave" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                </ul>
+            </div>
+        </div>
+
         <script type="module" src="main.js"></script>
+        </div>
     </body>
 
 </html>

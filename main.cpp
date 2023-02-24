@@ -130,6 +130,11 @@ static int apply_config()
     return 0;
 }
 
+static int get_status()
+{
+    return 0;
+}
+
 static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
     //struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir_fn
     if (ev == MG_EV_POLL) {
@@ -141,6 +146,25 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         struct mg_http_message *hm = (struct mg_http_message *) ev_data;
         struct user_info *u = getuser(hm);
         MG_INFO(("http: \n%s\n", hm->message.ptr));
+//用户认证
+#if 1
+        if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
+            MG_INFO(("zsppp denied ##############################\n"));
+            // All URIs starting with /api/ must be authenticated
+            mg_http_reply(c, 403, "", "Denied\n");
+            return;
+        }
+        else if (mg_http_match_uri(hm, "/api/data")) {
+            mg_http_reply(c, 200, "Content-Type: application/json\r\n",
+                          "{%Q:%Q,%Q:%Q}\n", "text", "Hello!", "data", "somedata");
+        }
+        else if (mg_http_match_uri(hm, "/api/login")) {
+            mg_http_reply(c, 200, "Content-Type: application/json\r\n",
+                          "{%Q:%Q,%Q:%Q}\n", "user", u->name, "token", u->token);
+        }
+#endif
+
+
         if (mg_http_match_uri(hm, "/api/fn3")) {
             MG_INFO(("zsppp test fn3 ##############################\n"));
             struct mg_str *host;
@@ -192,25 +216,6 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         }
         else if (mg_http_match_uri(hm, "/api/param")) {
         }
-
-//用户认证
-#if 1
-        else if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
-            MG_INFO(("zsppp denied ##############################\n"));
-            // All URIs starting with /api/ must be authenticated
-            mg_http_reply(c, 403, "", "Denied\n");
-            return;
-        }
-#endif
-        else if (mg_http_match_uri(hm, "/api/data")) {
-            mg_http_reply(c, 200, "Content-Type: application/json\r\n",
-                          "{%Q:%Q,%Q:%Q}\n", "text", "Hello!", "data", "somedata");
-        }
-        else if (mg_http_match_uri(hm, "/api/login")) {
-            mg_http_reply(c, 200, "Content-Type: application/json\r\n",
-                          "{%Q:%Q,%Q:%Q}\n", "user", u->name, "token", u->token);
-        }
-
 
         else {
             MG_INFO(("zsppp unknow uri\n"));

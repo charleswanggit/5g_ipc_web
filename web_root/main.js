@@ -143,7 +143,7 @@ const Login = function (props) {
 };
 
 
-
+var count = 1;
 const App = function () {
   const [user, setUser] = useState('');
   const [data, setData] = useState({});
@@ -174,11 +174,12 @@ const App = function () {
   }, []);
 
   if (!user) return html`<${Login} login=${login} />`;
+    alert('why? ' + count);
+    count++;
 
-  return html`
-<${Nav} user=${user} logout=${logout} />
-<${Main} data=${data} />
-`;
+  return html`<${Nav} user=${user} logout=${logout} />`;
+  //<${Main} data=${data} />
 };
 
 window.onload = () => render(h(App), document.body);
+

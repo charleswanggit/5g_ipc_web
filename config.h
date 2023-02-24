@@ -8,6 +8,7 @@
  ************************************************************************/
 #pragma once
 
+#include <json/json.h>
 #include <iostream>
 #include <stdint.h>
 //#include <vector>
@@ -25,6 +26,8 @@ typedef enum
     CONFIG_WHITE_LIGHT,
     CONFIG_RECORD,
     CONFIG_NTP,
+    CONFIG_RTSP_PORT,
+    CONFIG_LOCAL_IP,
 }CONFIG_ITEM;
 
 int config_load();
@@ -36,6 +39,7 @@ int config_get(CONFIG_ITEM item);
 int config_set_json(std::string json_str);
 std::string config_get_json();
 
+//extern Json::Value g_json_root;
 
 
 

@@ -1,5 +1,7 @@
 'use strict';
-//import { h, html, render, useEffect, useState } from './preact.min.js';
+import { h, html, render, useEffect, useState } from './preact.min.js';
+
+//var main_page = document.body;
 
 var input1=1;
 var input2=2;
@@ -56,19 +58,6 @@ async function test_interface(){
     if (response.status == 200) {
         log('get location ' + JSON.stringify(json));
 
-        // test
-        /*
-        E('info1').innerText="Bit rate: ";
-        E('value1').innerHTML=json.CONFIG_BIT_RATE;
-        E('select1').selectedIndex=json.CONFIG_BIT_RATE;
-
-        E('info2').innerHTML="CONFIG_PICTURE_SIZE";
-        E('value2').innerHTML=json.CONFIG_PICTURE_SIZE;
-
-        E('info3').innerHTML="CONFIG_BAUD_RATE";
-        E('value3').innerHTML=json.CONFIG_BAUD_RATE;
-        */
-
         E('select_bit_rate').selectedIndex=json.CONFIG_BIT_RATE;
         E('select_resolution').selectedIndex=json.CONFIG_RESOLUTION;
         E('select_horizontal_image').selectedIndex=json.CONFIG_HORIZONTAL_IMAGE;
@@ -115,10 +104,113 @@ async function ConfigSubmit(){
 }
 E('btn_submit').onclick = ev => ConfigSubmit();
 
-//window.onload = () => render(h(App), document.body);
+const Nav = props => html`
+<div style="background: #333; padding: 0.5em; color: #fff;">
+  <div class="container d-flex">
+    <div style="flex: 1 1 auto; display: flex; align-items: center;">
+      <b>IPC Web Settings</b>
+    </div>
+    <div style="display: flex; align-items: center; flex: 0 0 auto; ">
+      <span>Logged in as:</span>
+      <span style="padding: 0 0.5em;"><img src="user.png" height="22" /></span>
+      <span>${props.user}</span>
+      <a class="btn" onclick=${props.logout}
+        style="margin-left: 1em; font-size: 0.8em; background: #8aa;">logout</a>
+    </div>
+  </div>
+</div>`;
 
-window.onload = function(){
+
+const Login = function (props) {
+  const [user, setUser] = useState('');
+  const [pass, setPass] = useState('');
+  const login = () =>
+    fetch(
+      '/api/login',
+      { headers: { Authorization: 'Basic ' + btoa(user + ':' + pass) } })
+      .then(r => r.json())
+      .then(r => r && props.login(r))
+      .catch(err => err);
+  return html`
+<div class="rounded border" style="max-width: 480px; margin: 0 auto; margin-top: 5em; background: #eee; ">
+  <div style="padding: 2em; ">
+    <h1 style="color: #666;">IPC Web Settings Login </h1>
+    <div style="margin: 0.5em 0;">
+      <input type='text' placeholder='Name' style="width: 100%;"
+        oninput=${ev => setUser(ev.target.value)} value=${user} />
+    </div>
+    <div style="margin: 0.5em 0;">
+      <input type="password" placeholder="Password" style="width: 100%;"
+        oninput=${ev => setPass(ev.target.value)} value=${pass}
+        onchange=${login} />
+    </div>
+    <div style="margin: 1em 0;">
+      <button class="btn" style="width: 100%; background: #8aa;"
+        disabled=${!user || !pass} onclick=${login}> Login </button>
+    </div>
+    <div style="color: #777; margin-top: 2em;">
+      Valid logins: admin:pass0, user1:pass1, user2:pass2
+    </div>
+  </div>
+</div>`;
+};
+
+
+const App = function () {
+  const [user, setUser] = useState('');
+  const [data, setData] = useState({});
+
+  const getin = () =>
+    fetch('/api/data', { headers: { Authorization: '' } })
+      .then(r => r.json())
+      .then(r => setData(r))
+      .catch(err => console.log(err));
+
+  const login = function (u) {
+    document.cookie = `access_token=${u.token}; Secure, HttpOnly; SameSite=Lax; path=/; max-age=3600`;
+    setUser(u.user);
+    return getin();
+  };
+
+  const logout = () => {
+    document.cookie = `access_token=; Secure, HttpOnly; SameSite=Lax; path=/; max-age=0`;
+    setUser('');
+  };
+
+  useEffect(() => {
+    // Called once at init time
+    fetch('/api/login', { headers: { Authorization: '' } })
+      .then(r => r.json())
+      .then(r => login(r))
+      .catch(() => setUser(''));
+  }, []);
+
+    if (!user){
+        E('main_page').style.display = "none";
+        return html`<${Login} login=${login} />`;
+    }
+
+    /*
+  return html`
+<${Nav} user=${user} logout=${logout} />
+<${Main} data=${data} />
+`;
+    if (!user) {
+        window.location.href='login.html';
+    }
+*/
+
+    E('main_page').style.display = "block";
     test_interface();
-}
+    return html`<${Nav} user=${user} logout=${logout} />`;// + main_page;
+    //return main_page;
+};
+
+
+//window.onload = () => render(h(App), document.body);
+window.onload = () => render(h(App), E('login'));
+/*window.onload = function(){
+    test_interface();
+}*/
 
 
