@@ -104,6 +104,7 @@ async function GetConfigJSON(){
         E('select_white_light').selectedIndex=json.CONFIG_WHITE_LED;
         E('select_record').selectedIndex=json.CONFIG_RECORD_ENABLE;
         E('select_ntp').selectedIndex=json.CONFIG_SYNCTIME_ENABLE;
+        E('select_net').selectedIndex=json.CONFIG_NET;
         E('rtsp_port').value=json.CONFIG_RTSP_PORT;
         E('ip_address').value=json.CONFIG_IP_ADDRESS;
     }
@@ -140,6 +141,7 @@ function ConfigJSON(){
                         "CONFIG_WHITE_LED":E('select_white_light').selectedIndex,
                         "CONFIG_RECORD_ENABLE":E('select_record').selectedIndex,
                         "CONFIG_SYNCTIME_ENABLE":E('select_ntp').selectedIndex,
+                        "CONFIG_NET":E('select_net').selectedIndex,
                         "CONFIG_RTSP_PORT":E('rtsp_port').value,
                         "CONFIG_IP_ADDRESS":E('ip_address').value
                     });

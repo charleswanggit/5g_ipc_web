@@ -159,11 +159,18 @@ int web_apply_config()
                 char const *whiteled_map[] = {"auto", "open", "close"};
                 value_str = whiteled_map[value];
             }
+            else if (cmd == CONFIG_NET) {
+                char const *net_map[] = {"auto", "4g lte", "5g nsa", "5g sa"};
+                value_str = net_map[value];
+            }
             else if (cmd == CONFIG_SENSOR_HRZ_MIRROR ||
                      cmd == CONFIG_SENSOR_TILT_MIRROR ||
                      cmd == CONFIG_RECORD_ENABLE ||
                      cmd == CONFIG_SYNCTIME_ENABLE) {
                 value_str = value?"open":"close";
+            }
+            else {
+                continue;
             }
         }
         else {
