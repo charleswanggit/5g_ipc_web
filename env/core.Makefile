@@ -131,6 +131,7 @@ endif
 ifeq ($(findstring exe,$(BUILD_TARGET_TYPE)), exe)
 	@echo '<$(LD)>creating binary "$(BIN)"'
 	$(Q_)$(LD)  $(LDFLAGS) $(OBJ)  $(DYN_LDS_WITH) $(STATIC_LDS_WITH) -o $(BIN) && chmod a+x $(BIN)
+	$(STRIP) $(BIN)
 else
 ifeq ($(findstring shared,$(BUILD_TARGET_TYPE)), shared)
 	@echo '<$(LD)>creating shared lib "$(BIN)"'
@@ -142,7 +143,6 @@ endif
 endif
 
 #编译结束后的处理
-#$(STRIP) $(BIN)
 	$(DONE)
 	@echo '... done'
 	@echo

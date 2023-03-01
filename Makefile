@@ -19,15 +19,29 @@ OUT_DIR=$(ROOT_DIR)/out
 #############################
 # 模块
 #############################
+NAME := web
 
-NAME := web_demo
+# 单元测试
+TEST=y
+ifeq ($(TEST), y)
 BUILD_TARGET_TYPE := exe
-
 SRC += ./main.cpp
+else
+BUILD_TARGET_TYPE := static
+endif
+
+SRC += ./web_server.cpp
 SRC += ./config.cpp
 SRC += ./mongoose.c
 
+JSONCPP_SRC=n
+ifeq ($(JSONCPP_SRC), y)
+SRC += ./3rdparty/src/json/json_reader.cpp
+SRC += ./3rdparty/src/json/json_value.cpp
+SRC += ./3rdparty/src/json/json_writer.cpp
+else
 STATIC_LDS_WITH += ./3rdparty/lib/libjsoncpp.a
+endif
 
 GNUFLAGS += -Wall -D_GNU_SOURCE  -fno-builtin \
 	 -ggdb3 #-Werror

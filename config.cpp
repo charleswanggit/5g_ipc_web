@@ -21,36 +21,23 @@ struct config_t
     CONFIG_ITEM item;
     //char item_name[64];
     std::string item_name;
+    int type; // int: 0 string: 1
+    std::string default_string;
 };
 
 static const config_t g_config_list[] =
 {
-    /*
-    {1, ENUM_TYPE_AND_STRING(CONFIG_SERIAL_NUMBER)},
-    {115200, ENUM_TYPE_AND_STRING(CONFIG_BAUD_RATE)},
-
-    {0x77, ENUM_TYPE_AND_STRING(CONFIG_PICTURE_SIZE)},
-    {0x36, ENUM_TYPE_AND_STRING(CONFIG_PICTURE_COMPRESS)},
-    {50, ENUM_TYPE_AND_STRING(CONFIG_PICTURE_BRIGHT)},
-
-    {45, ENUM_TYPE_AND_STRING(CONFIG_GY_DEGREE_1)},
-    {0, ENUM_TYPE_AND_STRING(CONFIG_GY_DEGREE_2)},
-    {0, ENUM_TYPE_AND_STRING(CONFIG_GY_DIRECTION)},
-
-    {1, ENUM_TYPE_AND_STRING(CONFIG_GY_PICTURE_COUNT)},
-    {0, ENUM_TYPE_AND_STRING(CONFIG_RESET_FLAG)},
-    {0, ENUM_TYPE_AND_STRING(CONFIG_REBOOT_FLAG)},
-    */
-
-    {2, 6, ENUM_TYPE_AND_STRING(CONFIG_BIT_RATE)}, //Mbps
+    {2, 6, ENUM_TYPE_AND_STRING(CONFIG_RTSP_BITRATE)}, //Mbps
     {0, 3, ENUM_TYPE_AND_STRING(CONFIG_RESOLUTION)},
-    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_HORIZONTAL_IMAGE)},
-    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_VERTICAL_IMAGE)},
-    {0, 3, ENUM_TYPE_AND_STRING(CONFIG_COLOR_MODE)},
-    {0, 3, ENUM_TYPE_AND_STRING(CONFIG_WHITE_LIGHT)},
-    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_RECORD)},
-    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_NTP)},
-    {554, 65536, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT)},
+    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_SENSOR_HRZ_MIRROR)},
+    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_SENSOR_TILT_MIRROR)},
+    {0, 3, ENUM_TYPE_AND_STRING(CONFIG_DAYNIGHT)},
+    {0, 3, ENUM_TYPE_AND_STRING(CONFIG_WHITE_LED)},
+    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_RECORD_ENABLE)},
+    {0, 2, ENUM_TYPE_AND_STRING(CONFIG_SYNCTIME_ENABLE)},
+    //{554, 65536, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT)},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT), 1, "554"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_IP_ADDRESS), 1, "0.0.0.0"},
 };
 
 //static const char g_config_path[] = "/etc/config/sc1a03_config.json";
@@ -137,7 +124,12 @@ int config_load()
 
     Json::Value tmp;
     for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
-        tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_value));
+        if (g_config_list[i].type == 0) {
+            tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_value));
+        }
+        else {
+            tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_string));
+        }
         g_json_root[g_config_list[i].item_name] = tmp;
     }
 
@@ -151,7 +143,12 @@ int config_load()
 int config_reset()
 {
     for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
-        g_json_root[g_config_list[i].item_name] = g_config_list[i].default_value;
+        if (g_config_list[i].type == 0) {
+            g_json_root[g_config_list[i].item_name] = g_config_list[i].default_value;
+        }
+        else {
+            g_json_root[g_config_list[i].item_name] = g_config_list[i].default_string;
+        }
     }
     g_json_root["picture_list"].clear();
     return config_save();
@@ -170,12 +167,38 @@ int config_set(CONFIG_ITEM item, int value)
 
 int config_get(CONFIG_ITEM item)
 {
+#if 0
     for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
-        if (item == g_config_list[i].item) {
+        if (item == g_config_list[i].item && g_config_list[i].type == 0) {
             return g_json_root[g_config_list[i].item_name].asInt();
         }
     }
-    printf("config get %d failed\n", item);
+#endif
+    if (g_json_root[g_config_list[item].item_name].type() == Json::intValue) {
+        return g_json_root[g_config_list[item].item_name].asInt();
+    }
+    printf("config get %d: %s failed\n", item, g_config_list[item].item_name);
     return -1;
+}
+
+int config_get_item_type(CONFIG_ITEM item)
+{
+    return g_config_list[item].type;
+}
+std::string config_get_item_name(CONFIG_ITEM item)
+{
+    return g_config_list[item].item_name;
+}
+
+
+std::string config_get_string(CONFIG_ITEM item)
+{
+    for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
+        if (item == g_config_list[i].item && g_config_list[i].type == 1) {
+            return g_json_root[g_config_list[i].item_name].asString();
+        }
+    }
+    printf("config get string %d: %s failed\n", item, g_config_list[item].item_name);
+    return "";
 }
 

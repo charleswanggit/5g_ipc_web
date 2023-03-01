@@ -48,32 +48,80 @@ function zsp_fun(){
     btn2.innerHTML="Call SUM(" + input1 +", "+ input2 + ")";
 }
 
-async function test_interface(){
-    //window.location.href="http://127.0.0.1:8000/web_root";
+var time1;
+async function GetDeviceInfo(){
+    /*
+    fetch('/api/device_info')
+        .then(r => r.text())
+        .then(r => {
+            console.log(r);
+            log('GET /api/device_info: ' + r);
+        })
+        .catch(err => {window.clearInterval(time1);console.log(err)});
+    */
+    try {
+        let response = await fetch('/api/device_info');
+        if (response.status == 200) {
+            let json = await response.json();
+            //console.log(json);
+            log('GET /api/device_info: ' + JSON.stringify(json));
+            E('s_sim').innerHTML=json.STATUS_SIM;
+            E('s_imei').innerHTML=json.STATUS_IMEI;
+            E('s_imsi').innerHTML=json.STATUS_IMSI;
+            E('s_reg').innerHTML=json.STATUS_REG;
+            E('s_channel').innerHTML=json.STATUS_CHANNEL;
+            E('s_rsrp').innerHTML=json.STATUS_RSRP;
+            E('s_sinr').innerHTML=json.STATUS_SINR;
+            E('s_ip').innerHTML=json.STATUS_IP;
+            E('s_mac').innerHTML=json.STATUS_MAC;
+            E('s_gateway').innerHTML=json.STATUS_GATEWAY;
+            E('s_dns').innerHTML=json.STATUS_DNS;
+        }
+        else {
+            //window.clearInterval(time1);
+            location.reload();
+        }
+    } catch (error) {
+        window.clearInterval(time1);
+        console.log(error);
+    }
+}
 
+async function GetConfigJSON(){
     //fetch('/api/sum', {method: 'POST', body:JSON.stringify([1, 2])});
+
     //try {
-    let response = await fetch('/api/fn3', {method: 'POST', body:JSON.stringify([1, 2])});
+    let response = await fetch('/api/settings', {method: 'POST', body:JSON.stringify([1, 2])});
     let json = await response.json();
     if (response.status == 200) {
         log('get location ' + JSON.stringify(json));
 
-        E('select_bit_rate').selectedIndex=json.CONFIG_BIT_RATE;
+        E('select_bit_rate').selectedIndex=json.CONFIG_RTSP_BITRATE;
         E('select_resolution').selectedIndex=json.CONFIG_RESOLUTION;
-        E('select_horizontal_image').selectedIndex=json.CONFIG_HORIZONTAL_IMAGE;
-        E('select_vertical_image').selectedIndex=json.CONFIG_VERTICAL_IMAGE;
-        E('select_color_mode').selectedIndex=json.CONFIG_COLOR_MODE;
-        E('select_white_light').selectedIndex=json.CONFIG_WHITE_LIGHT;
-        E('select_record').selectedIndex=json.CONFIG_RECORD;
-        E('select_ntp').selectedIndex=json.CONFIG_NTP;
-        //window.location.href=json.url;
+        E('select_horizontal_image').selectedIndex=json.CONFIG_SENSOR_HRZ_MIRROR;
+        E('select_vertical_image').selectedIndex=json.CONFIG_SENSOR_TILT_MIRROR;
+        E('select_color_mode').selectedIndex=json.CONFIG_DAYNIGHT;
+        E('select_white_light').selectedIndex=json.CONFIG_WHITE_LED;
+        E('select_record').selectedIndex=json.CONFIG_RECORD_ENABLE;
+        E('select_ntp').selectedIndex=json.CONFIG_SYNCTIME_ENABLE;
+        E('rtsp_port').value=json.CONFIG_RTSP_PORT;
+        E('ip_address').value=json.CONFIG_IP_ADDRESS;
     }
     return;
     //return await response.json();
     //} catch (error) {
     //  console.log('Request Failed', error);
     //}
+}
 
+async function test_interface(){
+    window.clearInterval(time1);
+    GetDeviceInfo();
+    time1 = window.setInterval(GetDeviceInfo, 10000);
+
+    //window.location.href="http://127.0.0.1:8000/web_root";
+
+    GetConfigJSON();
 }
 btn3.onclick = ev => test_interface();
 
@@ -83,20 +131,27 @@ function config_submit(){
 }
 */
 function ConfigJSON(){
-    return JSON.stringify({"CONFIG_BIT_RATE":E('select_bit_rate').selectedIndex,
+    return JSON.stringify({
+                        "CONFIG_RTSP_BITRATE":E('select_bit_rate').selectedIndex,
                         "CONFIG_RESOLUTION":E('select_resolution').selectedIndex,
-                        "CONFIG_HORIZONTAL_IMAGE":E('select_horizontal_image').selectedIndex,
-                        "CONFIG_VERTICAL_IMAGE":E('select_vertical_image').selectedIndex,
-                        "CONFIG_COLOR_MODE":E('select_color_mode').selectedIndex,
-                        "CONFIG_WHITE_LIGHT":E('select_white_light').selectedIndex,
-                        "CONFIG_RECORD":E('select_record').selectedIndex,
-                        "CONFIG_NTP":E('select_ntp').selectedIndex});
+                        "CONFIG_SENSOR_HRZ_MIRROR":E('select_horizontal_image').selectedIndex,
+                        "CONFIG_SENSOR_TILT_MIRROR":E('select_vertical_image').selectedIndex,
+                        "CONFIG_DAYNIGHT":E('select_color_mode').selectedIndex,
+                        "CONFIG_WHITE_LED":E('select_white_light').selectedIndex,
+                        "CONFIG_RECORD_ENABLE":E('select_record').selectedIndex,
+                        "CONFIG_SYNCTIME_ENABLE":E('select_ntp').selectedIndex,
+                        "CONFIG_RTSP_PORT":E('rtsp_port').value,
+                        "CONFIG_IP_ADDRESS":E('ip_address').value
+                    });
 }
 async function ConfigSubmit(){
     try {
         let response = await fetch('/api/submit', {method: 'POST', body:ConfigJSON()});
         let text = await response.text();
         alert(text);
+        if (response.status != 200) {
+            location.reload();
+        }
     } catch (error) {
         console.log('Request Failed', error);
         alert('set failed');
