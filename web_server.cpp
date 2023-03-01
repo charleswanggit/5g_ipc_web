@@ -163,7 +163,7 @@ int web_apply_config()
                      cmd == CONFIG_SENSOR_TILT_MIRROR ||
                      cmd == CONFIG_RECORD_ENABLE ||
                      cmd == CONFIG_SYNCTIME_ENABLE) {
-                value_str = value?"close":"open";
+                value_str = value?"open":"close";
             }
         }
         else {
@@ -234,7 +234,7 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         }
 
         else if (mg_http_match_uri(hm, "/api/settings")) {
-            MG_INFO(("zsppp test settings ##############################\n"));
+            //MG_INFO(("zsppp test settings ##############################\n"));
             struct mg_str *host;
             host = mg_http_get_header(hm, "Host");
             if (host) {
@@ -277,7 +277,6 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         }
         else if (mg_http_match_uri(hm, "/api/param")) {
         }
-
         else {
             //MG_INFO(("zsppp unknow uri\n"));
             struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir

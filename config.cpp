@@ -38,6 +38,11 @@ static const config_t g_config_list[] =
     //{554, 65536, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT)},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT), 1, "554"},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_IP_ADDRESS), 1, "0.0.0.0"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_NTPSERVER1), 1, "ntp1.aliyun.com"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_NTPSERVER2), 1, "time1.cloud.tencent.com"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_TIMEZONE), 1, "Asia/Shanghai"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_HEARTBEATIP), 1, "0"},
+
 };
 
 //static const char g_config_path[] = "/etc/config/sc1a03_config.json";
