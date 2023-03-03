@@ -58,7 +58,7 @@ async function GetDeviceInfo(){
             log('GET /api/device_info: ' + r);
         })
         .catch(err => {window.clearInterval(time1);console.log(err)});
-    */
+        */
     try {
         let response = await fetch('/api/device_info');
         if (response.status == 200) {
@@ -118,7 +118,7 @@ async function GetConfigJSON(){
 async function test_interface(){
     window.clearInterval(time1);
     GetDeviceInfo();
-    time1 = window.setInterval(GetDeviceInfo, 10000);
+    time1 = window.setInterval(GetDeviceInfo, 10000 * 100);
 
     //window.location.href="http://127.0.0.1:8000/web_root";
 
@@ -133,20 +133,23 @@ function config_submit(){
 */
 function ConfigJSON(){
     return JSON.stringify({
-                        "CONFIG_RTSP_BITRATE":E('select_bit_rate').selectedIndex,
-                        "CONFIG_RESOLUTION":E('select_resolution').selectedIndex,
-                        "CONFIG_SENSOR_HRZ_MIRROR":E('select_horizontal_image').selectedIndex,
-                        "CONFIG_SENSOR_TILT_MIRROR":E('select_vertical_image').selectedIndex,
-                        "CONFIG_DAYNIGHT":E('select_color_mode').selectedIndex,
-                        "CONFIG_WHITE_LED":E('select_white_light').selectedIndex,
-                        "CONFIG_RECORD_ENABLE":E('select_record').selectedIndex,
-                        "CONFIG_SYNCTIME_ENABLE":E('select_ntp').selectedIndex,
-                        "CONFIG_NET":E('select_net').selectedIndex,
-                        "CONFIG_RTSP_PORT":E('rtsp_port').value,
-                        "CONFIG_IP_ADDRESS":E('ip_address').value
-                    });
+                          "CONFIG_RTSP_BITRATE":E('select_bit_rate').selectedIndex,
+                          "CONFIG_RESOLUTION":E('select_resolution').selectedIndex,
+                          "CONFIG_SENSOR_HRZ_MIRROR":E('select_horizontal_image').selectedIndex,
+                          "CONFIG_SENSOR_TILT_MIRROR":E('select_vertical_image').selectedIndex,
+                          "CONFIG_DAYNIGHT":E('select_color_mode').selectedIndex,
+                          "CONFIG_WHITE_LED":E('select_white_light').selectedIndex,
+                          "CONFIG_RECORD_ENABLE":E('select_record').selectedIndex,
+                          "CONFIG_SYNCTIME_ENABLE":E('select_ntp').selectedIndex,
+                          "CONFIG_NET":E('select_net').selectedIndex,
+                          "CONFIG_RTSP_PORT":E('rtsp_port').value,
+                          "CONFIG_IP_ADDRESS":E('ip_address').value
+    });
 }
 async function ConfigSubmit(){
+    E('btn1_save').disabled = true;
+    //E('btn2_save').disabled = true;
+    E('btn3_save').disabled = true;
     try {
         let response = await fetch('/api/submit', {method: 'POST', body:ConfigJSON()});
         let text = await response.text();
@@ -158,8 +161,57 @@ async function ConfigSubmit(){
         console.log('Request Failed', error);
         alert('set failed');
     }
+    E('btn1_save').disabled = false;
+    //E('btn2_save').disabled = false;
+    E('btn3_save').disabled = false;
 }
-E('btn_submit').onclick = ev => ConfigSubmit();
+
+E('btn1_save').onclick = ev => ConfigSubmit();
+E('btn2_save').onclick = ev => ConfigSubmit();
+E('btn3_save').onclick = ev => ConfigSubmit();
+
+async function UpLoad(){
+    E('btn_upload').disabled = true;
+    const file = E('file_upload').files[0];
+    var data;
+    var reader = new FileReader();
+    reader.onload = function() {
+        data = reader.result.split(",")[1];
+        //console.log(data);
+        fetch('/api/upgrade', { method: 'POST', body: data }
+        ).then(
+            response => response.text() // if the response is a JSON object
+        ).then(
+            text => {
+                console.log(text); // Handle the success response object
+                alert(text)
+            }
+        ).catch(
+            error => {
+                console.log(error); // Handle the error response object
+                alert('send failed')
+            }
+        );
+        E('btn_upload').disabled = false;
+    }
+    reader.readAsDataURL(file);
+}
+
+E('file_upload').addEventListener('change', (event) => {
+    const files = event.target.files;
+    console.log('files object', files);
+    console.log(files.length);
+    if (files.length > 0 && files[0].size < 10 * 1024 * 1024) {
+        E('btn_upload').disabled = false;
+    }
+    else {
+        E('btn_upload').disabled = true;
+    }
+    if (files.length > 0 && files[0].size > 10 * 1024 * 1024) {
+        alert('上传文件的大小需要小于10MB');
+    }
+});
+E('btn_upload').onclick = ev => UpLoad();
 
 const Nav = props => html`
 <div style="background: #333; padding: 0.5em; color: #fff;">
@@ -179,16 +231,16 @@ const Nav = props => html`
 
 
 const Login = function (props) {
-  const [user, setUser] = useState('');
-  const [pass, setPass] = useState('');
-  const login = () =>
-    fetch(
-      '/api/login',
-      { headers: { Authorization: 'Basic ' + btoa(user + ':' + pass) } })
-      .then(r => r.json())
-      .then(r => r && props.login(r))
-      .catch(err => err);
-  return html`
+    const [user, setUser] = useState('');
+    const [pass, setPass] = useState('');
+    const login = () =>
+        fetch(
+              '/api/login',
+              { headers: { Authorization: 'Basic ' + btoa(user + ':' + pass) } })
+            .then(r => r.json())
+            .then(r => r && props.login(r))
+            .catch(err => err);
+    return html`
 <div class="rounded border" style="max-width: 480px; margin: 0 auto; margin-top: 5em; background: #eee; ">
   <div style="padding: 2em; ">
     <h1 style="color: #666;">IPC Web Settings Login </h1>
@@ -214,33 +266,33 @@ const Login = function (props) {
 
 
 const App = function () {
-  const [user, setUser] = useState('');
-  const [data, setData] = useState({});
+    const [user, setUser] = useState('');
+    const [data, setData] = useState({});
 
-  const getin = () =>
-    fetch('/api/data', { headers: { Authorization: '' } })
-      .then(r => r.json())
-      .then(r => setData(r))
-      .catch(err => console.log(err));
+    const getin = () =>
+        fetch('/api/data', { headers: { Authorization: '' } })
+            .then(r => r.json())
+            .then(r => setData(r))
+            .catch(err => console.log(err));
 
-  const login = function (u) {
-    document.cookie = `access_token=${u.token}; Secure, HttpOnly; SameSite=Lax; path=/; max-age=3600`;
-    setUser(u.user);
-    return getin();
-  };
+    const login = function (u) {
+        document.cookie = `access_token=${u.token}; Secure, HttpOnly; SameSite=Lax; path=/; max-age=3600`;
+        setUser(u.user);
+        return getin();
+    };
 
-  const logout = () => {
-    document.cookie = `access_token=; Secure, HttpOnly; SameSite=Lax; path=/; max-age=0`;
-    setUser('');
-  };
+    const logout = () => {
+        document.cookie = `access_token=; Secure, HttpOnly; SameSite=Lax; path=/; max-age=0`;
+        setUser('');
+    };
 
-  useEffect(() => {
-    // Called once at init time
-    fetch('/api/login', { headers: { Authorization: '' } })
-      .then(r => r.json())
-      .then(r => login(r))
-      .catch(() => setUser(''));
-  }, []);
+    useEffect(() => {
+        // Called once at init time
+        fetch('/api/login', { headers: { Authorization: '' } })
+            .then(r => r.json())
+            .then(r => login(r))
+            .catch(() => setUser(''));
+    }, []);
 
     if (!user){
         E('main_page').style.display = "none";
@@ -255,7 +307,7 @@ const App = function () {
     if (!user) {
         window.location.href='login.html';
     }
-*/
+    */
 
     E('main_page').style.display = "block";
     test_interface();

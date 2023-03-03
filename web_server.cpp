@@ -19,8 +19,10 @@ static web_config_callback g_config_cb = nullptr;
 static web_status_callback g_status_cb = nullptr;
 static std::thread *g_thread = nullptr;
 static int g_sig_stop = 0;
-static const char *s_root_dir = "./webs";
+//static const char *s_root_dir = "./webs";
+static const char *s_root_dir = "./";
 static const char *s_listening_address = "http://0.0.0.0:8000";
+static const char *s_upgrade_path = "/tmp/upgrade.bin";
 
 #define ENUM_TYPE_CASE(x)           case x: return(#x)
 static const char* mg_ev_enum2strings(int n)
@@ -80,6 +82,18 @@ uint64_t utils_get_us()
     return ( now - timeorigin );
 }
 
+static int save_file(const char *file, int size)
+{
+    FILE *fo;
+    fo = fopen(s_upgrade_path, "wb+");
+    if(fo)
+    {
+        fwrite(file, 1, size, fo);
+        fclose(fo);
+        printf("-----------> save done<------------\n\n");
+    }
+    return 0;
+}
 
 // Authenticated user.
 // A user can be authenticated by:
@@ -148,7 +162,7 @@ int web_apply_config()
             }
             else if (cmd == CONFIG_RESOLUTION) {
 
-                char const *resolution_map[] = {"480p", "720p", "1440p"};
+                char const *resolution_map[] = {"720p", "1080p", "1440p"};
                 value_str = resolution_map[value];
             }
             else if (cmd == CONFIG_DAYNIGHT) {
@@ -264,7 +278,20 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
                 mg_http_reply(c, 403, "", "set error!\n");
             }
         }
-
+        else if (mg_http_match_uri(hm, "/api/upgrade")) {
+            //printf("body:\n%s\n", hm->body.ptr);
+            char *file_ptr = (char *)malloc(hm->body.len * 2);
+            int file_len = 0;
+            if (file_ptr == NULL) {
+                mg_http_reply(c, 403, "Content-Type: application/json\r\n", "received failed!");
+                return;
+            }
+            file_len = mg_base64_decode(hm->body.ptr, hm->body.len, file_ptr);
+            save_file(file_ptr, file_len);
+            mg_http_reply(c, 200, "Content-Type: application/json\r\n", "received OK!");
+            free(file_ptr);
+            g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
+        }
         else if (mg_http_match_uri(hm, "/api/f1")) {
             mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%ld}\n",
                           "result", utils_get_us()/1000000);

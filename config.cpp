@@ -48,7 +48,7 @@ static const config_t g_config_list[] =
 
 //static const char g_config_path[] = "/etc/config/sc1a03_config.json";
 static const char g_config_path[] = "./config.json";
-static Json::Value g_json_root;
+Json::Value g_json_root;
 
 static int config_save()
 {

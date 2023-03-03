@@ -28,7 +28,7 @@ int config_set_json(std::string json_str);
 std::string config_get_json();
 
 //TODO
-//extern Json::Value g_json_root;
+extern Json::Value g_json_root;
 
 
 

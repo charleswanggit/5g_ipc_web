@@ -41,3 +41,120 @@ a, a:visited, a:active { color: #55f; }
 .col-1 { width: 8.33%; }
 @media (min-width: 1310px) { .container { margin: auto; width: 1270px; } }
 @media (max-width: 920px) { .row .col { width: 100%; } }
+
+/*
+ * #fb6e52 橙色
+ */
+
+.page {
+    /*color: blue;
+    width: 500px;*/
+    text-align: left;
+}
+li {
+    list-style: none;
+}
+/*.lead label {*/
+.index label, p {
+    /* sizing and position */
+    width: 200px;
+    margin: left;
+    line-height: 3;
+    /* text */
+    font-size: 1.1rem;
+    /* Since the default font-size is 16px, I guessed that the correct
+    size would be 1.1rem. I set it, then checked it in the dev tools. */
+text-align: center;
+color: #000000;
+text-shadow: 1px 1px 1px black;
+/*border*/
+border-radius: 10px;
+border: 1px solid #990000;
+/* background */
+background-color: orange;
+background-image: linear-gradient(to top left, rgba(0,0,0,0.2), rgba(0,0,0,0.2) 30%, rgba(0,0,0,0));
+/* other effects */
+box-shadow: inset 2px 2px 3px rgba(255,255,255,0.6),
+inset -2px -2px 3px rgba(0,0,0,0.6),
+2px 2px 5px black;
+}
+/*
+.index li {
+    width: 250px;
+    float: left;
+}
+*/
+
+/* nav menu */
+nav {
+    float: left;
+    width: 20%;
+}
+.index {
+    /*float: left;*/
+    width: 100%;
+}
+
+.index li {
+    list-style-type: none;
+    margin-bottom: 2rem;
+    width: 20%;
+    display: inline-block;
+}
+
+.index li a {
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #a66;
+}
+.index li a:focus, nav li a:hover {
+    color: white;
+    background: #a66;
+}
+
+.index li a:active {
+    color: white;
+    background: black;
+}
+
+.page {
+    float: left;
+    width: 300px;
+    /*padding: 20px;*/
+}
+
+
+.test {
+    clear: both;
+}
+
+nav ul {
+  padding-left: 0;
+  margin-top: 0.8rem;
+}
+
+nav li {
+  list-style-type: none;
+  margin-bottom: 2rem;
+}
+
+nav li a {
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  line-height: 3;
+  text-align: center;
+  font-size: 2.5rem;
+  border: 1px solid #a66;
+}
+
+nav li a:focus, nav li a:hover {
+  color: white;
+  background: #a66;
+}
+
+nav li a:active {
+  color: white;
+  background: black;
+}
+

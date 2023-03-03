@@ -29,7 +29,7 @@ static int cb(CONFIG_ITEM key, const char *value)
 static int cb(STATUS_ITEM key, char *value, int size)
 {
     snprintf(value, size, "ok: %d", key);
-    mtc_print_info("%d, %s\n", key, value);
+    //mtc_print_info("%d, %s\n", key, value);
     return 0;
 }
 

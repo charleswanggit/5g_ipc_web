@@ -19,8 +19,9 @@
 
 #include "mongoose.h"
 
+#define MG_ENABLE_LINES
 #ifdef MG_ENABLE_LINES
-#line 1 "src/base64.c"
+#line 1 "3rdparty/src/base64/base64.c"
 #endif
 
 

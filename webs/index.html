@@ -14,235 +14,281 @@
     <body>
         <div id="login">
         </div>
+        <!--
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Finding us</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">Staff</a></li>
+                <li><a href="#">Media</a></li>
+                <li><a href="#">Prospectus</a></li>
+            </ul>
+        </nav>
+        -->
+
         <div id="main_page" style="display: none">
             <div class="row">
                 <h1>配置界面 demo</H1>
             </div>
-            <div class="index" style="display: block;">
-                <ul>
-                    <li><label>摄像头配置</label></li>
-                    <li><label>4G/5G网络接入辅助</label></li>
-                    <li><label>5G网络接入显示</label></li>
-                    <li><label>安全</label></li>
-                </ul>
-            </div>
-            <div id="settings_page" class="page" style="display: block;">
-                <h2>摄像头配置</h2>
-                <ul>
-                    <li>
-                        <span id="bit_rate">码流设置</span>
-                        <select id="select_bit_rate">
-                            <option>2Mbps</option>
-                            <option>4Mbps</option>
-                            <option>8Mbps</option>
-                            <option>12Mbps</option>
-                            <option>16Mbps</option>
-                            <option>20Mbps</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="resolution">分辨率设置</span>
-                        <select id="select_resolution">
-                            <option>480p</option>
-                            <option>720p</option>
-                            <option>1440p</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="horizontal_image">水平镜像</span>
-                        <select id="select_horizontal_image">
-                            <option>关</option>
-                            <option>开</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="vertical_image">垂直镜像</span>
-                        <select id="select_vertical_image">
-                            <option>关</option>
-                            <option>开</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="color_mode">黑白模式</span>
-                        <select id="select_color_mode">
-                            <option>自动</option>
-                            <option>彩色</option>
-                            <option>黑白</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="white_light">白光灯</span>
-                        <select id="select_white_light">
-                            <option>自动</option>
-                            <option>打开</option>
-                            <option>关闭</option>
-                        </select>
-                    </li>
-                    <li title="开的话按最高分辨率、最低帧率进行TF卡录像。">
-                        <span id="record">本地录像</span>
-                        <select id="select_record">
-                            <option>关</option>
-                            <option>开</option>
-                        </select>
-                    </li>
-                    <li>
-                        <span id="ntp">时间同步</span>
-                        <select id="select_ntp">
-                            <option>关</option>
-                            <option>开</option>
-                        </select>
-                    </li>
-                    <li title="网络制式选择：Auto，4G LTE，5G NSA, 5G SA">
-                        <span id="net">网络制式选择</span>
-                        <select id="select_net">
-                            <option>Auto</option>
-                            <option>4G LTE</option>
-                            <option>5G NSA</option>
-                            <option>5G SA</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label>RTSP port</label>
-                        <input id="rtsp_port" type="text" maxlength="5">
-                    </li>
-                    <li>
-                        <label>IP Address</label>
-                        <input id="ip_address" type="text" maxlength="16">
-                    </li>
-                    <li>
-                        <button id="btn_submit">Submit</button>
-                    </li>
-                </ul>
-                <br></br>
-            </div>
-            <div id="status_page" class="page" style="display: block;">
-                <h2>5G网络接入显示</h2>
-                <ul>
-                    <li><label>SIM卡状态 </label><span id="s_sim"></span></li>
-                    <li><label>IMEI </label><span id="s_imei"></span></li>
-                    <li><label>IMSI </label><span id="s_imsi"></span></li>
-                    <li><label>注册状态 </label><span id="s_reg"></span></li>
-                    <li><label>频段信息 </label><span id="s_channel"></span></li>
-                    <li title="这个不用显示"><label>上行速率(Mbps) </label><span id=""></span></li>
-                    <li><label>信号强度(dBM) </label><span id="s_rsrp"></span></li>
-                    <li><label>信噪比(dBM) </label><span id="s_sinr"></span></li>
-                    <li><label>IP </label><span id="s_ip"></span></li>
-                    <li><label>MAC </label><span id="s_mac"></span></li>
-                    <li><label>网关 </label><span id="s_gateway"></span></li>
-                    <li><label>DNS </label><span id="s_dns"></span></li>
-                    <li><label></label><span id=""></span></li>
-                </ul>
-            </div>
-        <br></br>
-        <hr />
-
-        <div style="margin-top: 1em;">Action log:</div>
-        <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
-
-        <div title="test" style="display: none;">
-            <div>
-                <div style="margin: 0.5em 0;">
-                    <input id="text1" type='text' placeholder='input1' style="width: 10%;"
-                                                                       oninput="zsp_fun()" value=101 />
-                </div>
-                <div style="margin: 0.5em 0;">
-                    <input id="text2" type='text' placeholder='input2' style="width: 10%;"
-                                                                       oninput="zsp_fun()" value=102 />
-                </div>
-
-                <button id="btn1">Call F1</button>
-                <button id="btn2">Call SUM(input1, ${input2})</button>
-                <button id="btn3">zsp test</button>
-            </div>
-
-            <dl>
-                <dt>第一条</dt>
-                <dd>你若是觉得你有实力和我玩，良辰不介意奉陪到底</dd>
-                <dd>我会让你明白，我从不说空话</dd>
-                <dd>我是本地的，我有一百种方式让你呆不下去；而你，无可奈何</dd>
-
-                <dt>第二条</dt>
-                <dd>良辰最喜欢对那些自认能力出众的人出手</dd>
-                <dd>你可以继续我行我素，不过，你的日子不会很舒心</dd>
-                <dd>你只要记住，我叫叶良辰</dd>
-                <dd>不介意陪你玩玩</dd>
-                <dd>良辰必有重谢</dd>
-
-            </dl>
-            <br></br>
-            <div class="bConfLCnt bConfLBC">
-                <h1 class="bMdelTitle">网络状态</h1>
-                <div id="netStateLCon" class="menuCon" style="overflow: hidden;">
-                    <div id="bsDisableDiv" class="disNone" style="display: block;">
-                        <ul id="netStateHostNet" class="netStateMenuItem">
-                            <i class="wifiLogo" id="wifiLogo1677075960083"></i>
-                            <li>
-                                <span class="wifiModelName">2.4G网络</span>
-                                <div id="hostSwitch" class="switchCon switchConNetState">
-                                    <i class="switchBg"></i>
-                                    <i class="switchBall"></i>
-                                </div>
-                                <span id="hostSwitchDes"></span>
-                            </li>
-                            <li><label>已连设备：</label><span id="hostWifiNum2G">3个</span></li>
-                            <li><label>名称</label><input id="hostWifiName" type="text" maxlength="32"></li>
-                            <li><label>密码</label><input id="hostWifiPwd" type="text" maxlength="63"></li>
-                            <li class="bottom"><input id="hostWifiSave2G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
-                        </ul>
-                        <ul class="netStateMenuItem">
-                            <i class="wifiLogo"></i>
-                            <li>
-                                <span class="wifiModelName">5G网络</span>
-                                <div id="hostSwitch5G" class="switchCon switchConNetState">
-                                    <i class="switchBg"></i>
-                                    <i class="switchBall"></i>
-                                </div>
-                                <span id="hostSwitchDes5G"></span>
-                            </li>
-                            <li><label>已连设备：</label><span id="hostWifiNum5G">1个</span></li>
-                            <li><label>名称</label><input id="hostWifiName5G" type="text" maxlength="32"></li>
-                            <li><label>密码</label><input id="hostWifiPwd5G" type="text" maxlength="63"></li>
-                            <li class="bottom"><input id="hostWifiSave5G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
-                        </ul>
-                    </div>
-                    <div id="bsEnableDiv" class="disNone" style="display: block;">
-                        <ul class="netStateMenuItem">
-                            <i class="wifiLogo"></i>
-                            <li>
-                                <span class="wifiModelName">主人网络</span>
-                                <div id="hostSwitchBs" class="switchCon switchConNetState">
-                                    <i class="switchBg"></i>
-                                    <i class="switchBall" style="left: 18px; background: url(&quot;../web-static/images/routerBg.png&quot;) -441px -53px no-repeat;"></i>
-                                </div>
-                                <span id="hostSwitchDesBs">已开启</span>
-                            </li>
-                            <li><label>已连设备：</label><span id="hostWifiNumBs">4个</span></li>
-                            <li><label>名称</label><input id="hostWifiNameBs" type="text" maxlength="32"></li>
-                            <li><label>密码</label><input id="hostWifiPwdBs" type="text" maxlength="63"></li>
-                            <li class="bottom"><input id="hostWifiSaveBs" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
-                        </ul>
-                    </div>
-                    <ul id="netStateGuestNet" class="netStateMenuItem disNone" style="display: block;">
-                        <i class="wifiLogo"></i>
-                        <li>
-                            <span class="wifiModelName">访客网络</span>
-                            <div id="guestSwitch" class="switchCon switchConNetState">
-                                <i class="switchBg"></i>
-                                <i class="switchBall" style="left: 0px; background: url(&quot;../web-static/images/routerBg.png&quot;) -424px -52px no-repeat;"></i>
-                            </div>
-                            <span id="guestSwitchDes">未开启</span>
-                        </li>
-                        <li><label>已连设备：</label><span id="guestWifiNum">0个</span></li>
-                        <li><label>名称</label><input id="guestWifiName" type="text" maxlength="32"></li>
-                        <li><label>密码</label><input id="guestWifiPwd" type="text" maxlength="63"></li>
-                        <li class=""><input id="guestWifiSave" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                <div class="index" style="display: block;">
+                    <ul>
+                        <li><a rel="#">摄像头配置</a></li>
+                        <li><a rel="#">4G/5G网络接入辅助</a></li>
+                        <li><a rel="#">5G网络接入显示</a></li>
+                        <li><a rel="#">安全</a></li>
                     </ul>
                 </div>
+                <div id="settings_page" class="page" style="display: block;">
+                    <h2>摄像头配置</h2>
+                    <ul>
+                        <li>
+                            <span id="bit_rate">码流设置</span>
+                            <select id="select_bit_rate">
+                                <option>2Mbps</option>
+                                <option>4Mbps</option>
+                                <option>8Mbps</option>
+                                <option>12Mbps</option>
+                                <option>16Mbps</option>
+                                <option>20Mbps</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="resolution">分辨率设置</span>
+                            <select id="select_resolution">
+                                <option>720p</option>
+                                <option>1080p</option>
+                                <option>1440p</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="horizontal_image">水平镜像</span>
+                            <select id="select_horizontal_image">
+                                <option>关</option>
+                                <option>开</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="vertical_image">垂直镜像</span>
+                            <select id="select_vertical_image">
+                                <option>关</option>
+                                <option>开</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="color_mode">黑白模式</span>
+                            <select id="select_color_mode">
+                                <option>自动</option>
+                                <option>彩色</option>
+                                <option>黑白</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="white_light">白光灯</span>
+                            <select id="select_white_light">
+                                <option>自动</option>
+                                <option>打开</option>
+                                <option>关闭</option>
+                            </select>
+                        </li>
+                        <li title="开的话按最高分辨率、最低帧率进行TF卡录像。">
+                            <span id="record">本地录像</span>
+                            <select id="select_record">
+                                <option>关</option>
+                                <option>开</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span id="ntp">时间同步</span>
+                            <select id="select_ntp">
+                                <option>关</option>
+                                <option>开</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>RTSP port</label>
+                            <input id="rtsp_port" type="text" maxlength="5">
+                        </li>
+                        <li>
+                            <button id="btn1_save">Save</button>
+                        </li>
+                    </ul>
+                    <br></br>
+                </div>
+                <div id="settings_page2" class="page" style="display: block;">
+                    <h2>4G/5G网络接入辅助</h2>
+                    <ul>
+                        <li title="网络制式选择：Auto，4G LTE，5G NSA, 5G SA">
+                            <span id="net">网络制式选择</span>
+                            <select id="select_net" disabled="true">
+                                <option>Auto</option>
+                                <option>4G LTE</option>
+                                <option>5G NSA</option>
+                                <option>5G SA</option>
+                            </select>
+                        <li>
+                            <button id="btn2_save" disabled="true">Save</button>
+                        </li>
+                    </ul>
+                    <br></br>
+                </div>
+                <div id="settings_page3" class="page" style="display: block;">
+                    <h2>有线WAN口IP配置</h2>
+                    <ul>
+                        <li>
+                            <label>IP Address</label>
+                            <input id="ip_address" type="text" maxlength="16">
+                        </li>
+                        <li>
+                            <button id="btn3_save">Save</button>
+                        </li>
+                    </ul>
+                    <br></br>
+                </div>
+                <div id="upgrade_page" class="page" style="display: block;">
+                    <h2>安全</h2>
+                    <ul>
+                        <li>
+                            <label>固件升级</label>
+                            <input id="file_upload" type="file">
+                        </li>
+                        <li>
+                            <button id="btn_upload" disabled="true">upgrade</button>
+                        </li>
+                    </ul>
+                    <br></br>
+                </div>
+                <div id="status_page" class="page" style="display: block; clear: both;">
+                    <h2>5G网络接入显示</h2>
+                    <ul>
+                        <li><label>SIM卡状态 </label><span id="s_sim"></span></li>
+                        <li><label>IMEI </label><span id="s_imei"></span></li>
+                        <li><label>IMSI </label><span id="s_imsi"></span></li>
+                        <li><label>注册状态 </label><span id="s_reg"></span></li>
+                        <li><label>频段信息 </label><span id="s_channel"></span></li>
+                        <li title="这个不用显示"><label>上行速率(Mbps) </label><span id=""></span></li>
+                        <li><label>信号强度(dBM) </label><span id="s_rsrp"></span></li>
+                        <li><label>信噪比(dBM) </label><span id="s_sinr"></span></li>
+                        <li><label>IP </label><span id="s_ip"></span></li>
+                        <li><label>MAC </label><span id="s_mac"></span></li>
+                        <li><label>网关 </label><span id="s_gateway"></span></li>
+                        <li><label>DNS </label><span id="s_dns"></span></li>
+                        <li><label></label><span id=""></span></li>
+                    </ul>
+                </div>
+            <br></br>
+            <div class="test" style="display: block; clear: both">
+            <hr/>
+            <div style="margin-top: 1em;">Action log:</div>
+            <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
             </div>
-        </div>
 
-        <script type="module" src="main.js"></script>
+            <div title="test" style="display: none;">
+                <div>
+                    <div style="margin: 0.5em 0;">
+                        <input id="text1" type='text' placeholder='input1' style="width: 10%;"
+                                                                           oninput="zsp_fun()" value=101 />
+                    </div>
+                    <div style="margin: 0.5em 0;">
+                        <input id="text2" type='text' placeholder='input2' style="width: 10%;"
+                                                                           oninput="zsp_fun()" value=102 />
+                    </div>
+
+                    <button id="btn1">Call F1</button>
+                    <button id="btn2">Call SUM(input1, ${input2})</button>
+                    <button id="btn3">zsp test</button>
+                </div>
+
+                <dl>
+                    <dt>第一条</dt>
+                    <dd>你若是觉得你有实力和我玩，良辰不介意奉陪到底</dd>
+                    <dd>我会让你明白，我从不说空话</dd>
+                    <dd>我是本地的，我有一百种方式让你呆不下去；而你，无可奈何</dd>
+
+                    <dt>第二条</dt>
+                    <dd>良辰最喜欢对那些自认能力出众的人出手</dd>
+                    <dd>你可以继续我行我素，不过，你的日子不会很舒心</dd>
+                    <dd>你只要记住，我叫叶良辰</dd>
+                    <dd>不介意陪你玩玩</dd>
+                    <dd>良辰必有重谢</dd>
+
+                </dl>
+                <br></br>
+                <div class="bConfLCnt bConfLBC">
+                    <h1 class="bMdelTitle">网络状态</h1>
+                    <div id="netStateLCon" class="menuCon" style="overflow: hidden;">
+                        <div id="bsDisableDiv" class="disNone" style="display: block;">
+                            <ul id="netStateHostNet" class="netStateMenuItem">
+                                <i class="wifiLogo" id="wifiLogo1677075960083"></i>
+                                <li>
+                                    <span class="wifiModelName">2.4G网络</span>
+                                    <div id="hostSwitch" class="switchCon switchConNetState">
+                                        <i class="switchBg"></i>
+                                        <i class="switchBall"></i>
+                                    </div>
+                                    <span id="hostSwitchDes"></span>
+                                </li>
+                                <li><label>已连设备：</label><span id="hostWifiNum2G">3个</span></li>
+                                <li><label>名称</label><input id="hostWifiName" type="text" maxlength="32"></li>
+                                <li><label>密码</label><input id="hostWifiPwd" type="text" maxlength="63"></li>
+                                <li class="bottom"><input id="hostWifiSave2G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                            </ul>
+                            <ul class="netStateMenuItem">
+                                <i class="wifiLogo"></i>
+                                <li>
+                                    <span class="wifiModelName">5G网络</span>
+                                    <div id="hostSwitch5G" class="switchCon switchConNetState">
+                                        <i class="switchBg"></i>
+                                        <i class="switchBall"></i>
+                                    </div>
+                                    <span id="hostSwitchDes5G"></span>
+                                </li>
+                                <li><label>已连设备：</label><span id="hostWifiNum5G">1个</span></li>
+                                <li><label>名称</label><input id="hostWifiName5G" type="text" maxlength="32"></li>
+                                <li><label>密码</label><input id="hostWifiPwd5G" type="text" maxlength="63"></li>
+                                <li class="bottom"><input id="hostWifiSave5G" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                            </ul>
+                        </div>
+                        <div id="bsEnableDiv" class="disNone" style="display: block;">
+                            <ul class="netStateMenuItem">
+                                <i class="wifiLogo"></i>
+                                <li>
+                                    <span class="wifiModelName">主人网络</span>
+                                    <div id="hostSwitchBs" class="switchCon switchConNetState">
+                                        <i class="switchBg"></i>
+                                        <i class="switchBall" style="left: 18px; background: url(&quot;../web-static/images/routerBg.png&quot;) -441px -53px no-repeat;"></i>
+                                    </div>
+                                    <span id="hostSwitchDesBs">已开启</span>
+                                </li>
+                                <li><label>已连设备：</label><span id="hostWifiNumBs">4个</span></li>
+                                <li><label>名称</label><input id="hostWifiNameBs" type="text" maxlength="32"></li>
+                                <li><label>密码</label><input id="hostWifiPwdBs" type="text" maxlength="63"></li>
+                                <li class="bottom"><input id="hostWifiSaveBs" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                            </ul>
+                        </div>
+                        <ul id="netStateGuestNet" class="netStateMenuItem disNone" style="display: block;">
+                            <i class="wifiLogo"></i>
+                            <li>
+                                <span class="wifiModelName">访客网络</span>
+                                <div id="guestSwitch" class="switchCon switchConNetState">
+                                    <i class="switchBg"></i>
+                                    <i class="switchBall" style="left: 0px; background: url(&quot;../web-static/images/routerBg.png&quot;) -424px -52px no-repeat;"></i>
+                                </div>
+                                <span id="guestSwitchDes">未开启</span>
+                            </li>
+                            <li><label>已连设备：</label><span id="guestWifiNum">0个</span></li>
+                            <li><label>名称</label><input id="guestWifiName" type="text" maxlength="32"></li>
+                            <li><label>密码</label><input id="guestWifiPwd" type="text" maxlength="63"></li>
+                            <li class=""><input id="guestWifiSave" class="bottomSaveBtn subBtn" type="button" value="保存"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
+        <script type="module" src="main.js"></script>
+
     </body>
 
 </html>
