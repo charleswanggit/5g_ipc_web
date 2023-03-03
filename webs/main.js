@@ -118,7 +118,7 @@ async function GetConfigJSON(){
 async function test_interface(){
     window.clearInterval(time1);
     GetDeviceInfo();
-    time1 = window.setInterval(GetDeviceInfo, 10000 * 100);
+    time1 = window.setInterval(GetDeviceInfo, 10000 * 1);
 
     //window.location.href="http://127.0.0.1:8000/web_root";
 
