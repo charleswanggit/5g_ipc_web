@@ -358,9 +358,9 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         mg_http_delete_chunk(c, hm);
         if (hm->chunk.len == 0) {
             save_file_ver2(NULL, 0);
-            g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
             MG_INFO(("Last chunk received, sending response"));
             mg_http_reply(c, 200, "", "upload OK!\n");
+            g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
         }
     }
     else {

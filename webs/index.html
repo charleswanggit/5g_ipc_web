@@ -28,17 +28,16 @@
         -->
 
         <div id="main_page" style="display: none">
-            <div class="row">
+            <div class="index" style="display: none;">
                 <h1>配置界面 demo</H1>
+                <ul>
+                    <li><a rel="#">摄像头配置</a></li>
+                    <li><a rel="#">4G/5G网络接入辅助</a></li>
+                    <li><a rel="#">5G网络接入显示</a></li>
+                    <li><a rel="#">安全</a></li>
+                </ul>
             </div>
-                <div class="index" style="display: block;">
-                    <ul>
-                        <li><a rel="#">摄像头配置</a></li>
-                        <li><a rel="#">4G/5G网络接入辅助</a></li>
-                        <li><a rel="#">5G网络接入显示</a></li>
-                        <li><a rel="#">安全</a></li>
-                    </ul>
-                </div>
+            <div class="settings_page">
                 <div id="settings_page" class="page" style="display: block;">
                     <h2>摄像头配置</h2>
                     <ul>
@@ -113,7 +112,7 @@
                             <button id="btn1_save">Save</button>
                         </li>
                     </ul>
-                    <br></br>
+                    <br>
                 </div>
                 <div id="settings_page2" class="page" style="display: block;">
                     <h2>4G/5G网络接入辅助</h2>
@@ -130,7 +129,7 @@
                             <button id="btn2_save" disabled="true">Save</button>
                         </li>
                     </ul>
-                    <br></br>
+                    <br>
                 </div>
                 <div id="settings_page3" class="page" style="display: block;">
                     <h2>有线WAN口IP配置</h2>
@@ -143,7 +142,7 @@
                             <button id="btn3_save">Save</button>
                         </li>
                     </ul>
-                    <br></br>
+                    <br>
                 </div>
                 <div id="upgrade_page" class="page" style="display: block;">
                     <h2>安全</h2>
@@ -151,7 +150,7 @@
                         <li style="display: none;">
                             <h3>固件升级</h3>
                             <input id="file_upload" type="file">
-                            <button id="btn_upload"  disabled="true">upgrade</button>
+                            <button id="btn_upload" disabled="true">upgrade</button>
                         </li>
                         <li style="display: none;">
                             <label>固件升级</label>
@@ -162,39 +161,40 @@
                         </li>
                         <li>
                             <h3>固件升级</h3>
-                            <input type="file" id="el1" style="display: none"/>
+                            <input type="file" id="el1" style="display: none" />
                             <button id="el2">choose file...</button>
-                            <span>Selected file:</span> <span id="el4"></span> <br/>
+                            <span>Selected file:</span> <span id="el4"></span> <br />
                             <button id="el5" style="margin: 0.5em 0;" disabled>upload file</button>
                             <div id="el3" style="margin-top: 1em;"></div>
                         </li>
                     </ul>
-                    <br></br>
+                    <br>
                 </div>
-                <div id="status_page" class="status_page">
-                    <h2>5G网络接入显示</h2>
-                    <ul>
-                        <li><label>SIM卡状态 </label><span id="s_sim"></span></li>
-                        <li><label>IMEI </label><span id="s_imei"></span></li>
-                        <li><label>IMSI </label><span id="s_imsi"></span></li>
-                        <li><label>注册状态 </label><span id="s_reg"></span></li>
-                        <li><label>频段信息 </label><span id="s_channel"></span></li>
-                        <li title="这个不用显示"><label>上行速率(Mbps) </label><span id=""></span></li>
-                        <li><label>信号强度(dBM) </label><span id="s_rsrp"></span></li>
-                        <li><label>信噪比(dBM) </label><span id="s_sinr"></span></li>
-                        <li><label>IP </label><span id="s_ip"></span></li>
-                        <li><label>MAC </label><span id="s_mac"></span></li>
-                        <li><label>网关 </label><span id="s_gateway"></span></li>
-                        <li><label>DNS </label><span id="s_dns"></span></li>
-                        <li><label></label><span id=""></span></li>
-                    </ul>
-                </div>
-            <br></br>
-            <br></br>
+            </div>
+            <div class="status_page">
+                <h2>5G网络接入显示</h2>
+                <ul>
+                    <li><label>SIM卡状态 </label><span id="s_sim"></span></li>
+                    <li><label>IMEI </label><span id="s_imei"></span></li>
+                    <li><label>IMSI </label><span id="s_imsi"></span></li>
+                    <li><label>注册状态 </label><span id="s_reg"></span></li>
+                    <li><label>频段信息 </label><span id="s_channel"></span></li>
+                    <li title="这个不用显示" style="display: none;"><label>上行速率(Mbps) </label><span id=""></span></li>
+                    <li><label>信号强度(dBM) </label><span id="s_rsrp"></span></li>
+                    <li><label>信噪比(dBM) </label><span id="s_sinr"></span></li>
+                    <li><label>IP </label><span id="s_ip"></span></li>
+                    <li><label>MAC </label><span id="s_mac"></span></li>
+                    <li><label>网关 </label><span id="s_gateway"></span></li>
+                    <li><label>DNS </label><span id="s_dns"></span></li>
+                    <li><label></label><span id=""></span></li>
+                </ul>
+            </div>
+            <br>
+            <br>
             <div class="test" style="display: none; clear: both">
-            <hr/>
-            <div style="margin-top: 1em;">Action log:</div>
-            <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
+                <hr/>
+                <div style="margin-top: 1em;">Action log:</div>
+                <div id="log" style="background: #eee; height: 10em; padding: 0.5em; overflow:auto;"></div>
             </div>
 
             <div title="test" style="display: none;">
@@ -227,7 +227,7 @@
                     <dd>良辰必有重谢</dd>
 
                 </dl>
-                <br></br>
+                <br>
                 <div class="bConfLCnt bConfLBC">
                     <h1 class="bMdelTitle">网络状态</h1>
                     <div id="netStateLCon" class="menuCon" style="overflow: hidden;">

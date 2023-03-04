@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; height: 100%; font: 16px sans-serif; }
+html, body { margin: 0; padding: 0; height: 100%; font: 16px sans-serif; background: #adbdbf;}
 select, input, label::before, textarea { outline: none; box-shadow:none !important; border: 1px solid #ccc !important; }
 code, pre { color: #373; font-family: monospace; font-weight: bolder; font-size: smaller; background: #ddd; padding: 0.1em 0.3em; border-radius: 0.2em; }
 textarea, input, .addon { font-size: 15px; border: 1px solid #ccc; padding: 0.5em; }
@@ -46,11 +46,6 @@ a, a:visited, a:active { color: #55f; }
  * #fb6e52 橙色
  */
 
-.page {
-    /*color: blue;
-    width: 500px;*/
-    text-align: left;
-}
 li {
     list-style: none;
 }
@@ -117,18 +112,61 @@ nav {
     background: black;
 }
 
+/*
 .page {
     float: left;
     width: 300px;
-    /*padding: 20px;*/
 }
-
+*/
+/*
 .status_page {
     text-align: center;
     width: 100%;
     display: block;
     clear: both;
 }
+*/
+
+.settings_page {
+    float: left;
+    width: 50%;
+}
+.settings_page label,
+.settings_page span {
+    display: inline-block;
+    width: 40%;
+}
+.settings_page ul {
+    width: 70%;
+}
+.settings_page ul, .settings_page li {
+    border: 1px solid #ccc;
+}
+
+.status_page {
+    float: left;
+    width: 50%;
+}
+.status_page label{
+    display: inline-block;
+    width: 40%;
+    text-align: left;
+}
+.status_page ul {
+    width: 70%;
+}
+.status_page ul, .status_page li {
+    border: 1px solid #ccc;
+}
+
+/*
+.status_page span{
+    width: 50%;
+    text-align: center;
+}
+*/
+
+
 
 .test {
     clear: both;
