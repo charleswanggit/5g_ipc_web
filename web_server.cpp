@@ -19,8 +19,7 @@ static web_config_callback g_config_cb = nullptr;
 static web_status_callback g_status_cb = nullptr;
 static std::thread *g_thread = nullptr;
 static int g_sig_stop = 0;
-//static const char *s_root_dir = "./webs";
-static const char *s_root_dir = "./";
+static const char *s_root_dir = "./webs";
 static const char *s_listening_address = "http://0.0.0.0:8000";
 static const char *s_upgrade_path = "/tmp/upgrade.bin";
 
@@ -92,6 +91,27 @@ static int save_file(const char *file, int size)
         fclose(fo);
         printf("-----------> save done<------------\n\n");
     }
+    return 0;
+}
+
+static int save_file_ver2(const char *file, int size)
+{
+    static FILE *fo = NULL;
+
+    if (file == NULL) {
+        fclose(fo);
+        fo = NULL;
+        printf("-----------> save done<------------\n\n");
+        return 0;
+    }
+
+    if(fo == NULL)
+    {
+        fo = fopen(s_upgrade_path, "wb+");
+    }
+
+    fwrite(file, 1, size, fo);
+
     return 0;
 }
 
@@ -221,14 +241,15 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
     if (ev == MG_EV_POLL) {
         return;
     }
+    struct mg_http_message *hm = (struct mg_http_message *) ev_data;
 
     //MG_INFO(("ev: %d, %s\n", ev, mg_ev_enum2strings(ev)));
     if (ev == MG_EV_HTTP_MSG) {
-        struct mg_http_message *hm = (struct mg_http_message *) ev_data;
-        struct user_info *u = getuser(hm);
         //MG_INFO(("http: \n%s\n", hm->message.ptr));
+        //printf("body:\n%s\n", hm->body.ptr);
 //用户认证
 #if 1
+        struct user_info *u = getuser(hm);
         if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
             MG_INFO(("zsppp denied ##############################\n"));
             // All URIs starting with /api/ must be authenticated
@@ -256,18 +277,19 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
 
         else if (mg_http_match_uri(hm, "/api/settings")) {
             //MG_INFO(("zsppp test settings ##############################\n"));
+            /*
             struct mg_str *host;
             host = mg_http_get_header(hm, "Host");
             if (host) {
                 MG_INFO(("zsppp host:%s\n", host->ptr));
                 printf("host end\n");
             }
+            */
             mg_http_reply(c, 200, "Content-Type: application/json\r\n", "%s", config_get_json().c_str());
             printf("\n%s\n", config_get_json().c_str());
 
         }
         else if (mg_http_match_uri(hm, "/api/submit")) {
-            printf("body:\n%s\n", hm->body.ptr);
             int ret = 0;
             ret = config_set_json(hm->body.ptr);
             ret |= web_apply_config();
@@ -279,7 +301,6 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
             }
         }
         else if (mg_http_match_uri(hm, "/api/upgrade")) {
-            //printf("body:\n%s\n", hm->body.ptr);
             char *file_ptr = (char *)malloc(hm->body.len * 2);
             int file_len = 0;
             if (file_ptr == NULL) {
@@ -291,6 +312,18 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
             mg_http_reply(c, 200, "Content-Type: application/json\r\n", "received OK!");
             free(file_ptr);
             g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
+        }
+        if (mg_http_match_uri(hm, "/api/form_upload")) {
+            struct mg_http_part part;
+            size_t ofs = 0;
+            while ((ofs = mg_http_next_multipart(hm->body, ofs, &part)) > 0) {
+                MG_INFO(("Chunk name: [%.*s] filename: [%.*s] length: %lu bytes",
+                         (int) part.name.len, part.name.ptr, (int) part.filename.len,
+                         part.filename.ptr, (unsigned long) part.body.len));
+                save_file(part.body.ptr, part.body.len);
+                g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
+            }
+            mg_http_reply(c, 200, "", "upload OK!");
         }
         else if (mg_http_match_uri(hm, "/api/f1")) {
             mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%ld}\n",
@@ -315,6 +348,19 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
             //MG_INFO(("zsppp unknow uri\n"));
             struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir
             mg_http_serve_dir(c, (mg_http_message*)ev_data, &opts);
+        }
+    }
+    else if (ev == MG_EV_HTTP_CHUNK && mg_http_match_uri(hm, "/api/upload")) {
+        //MG_INFO(("Got chunk len %lu", (unsigned long) hm->chunk.len));
+        //MG_INFO(("Query string: [%.*s]", (int) hm->query.len, hm->query.ptr));
+        // MG_INFO(("Chunk data:\n%.*s", (int) hm->chunk.len, hm->chunk.ptr));
+        save_file_ver2(hm->chunk.ptr, hm->chunk.len);
+        mg_http_delete_chunk(c, hm);
+        if (hm->chunk.len == 0) {
+            save_file_ver2(NULL, 0);
+            g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
+            MG_INFO(("Last chunk received, sending response"));
+            mg_http_reply(c, 200, "", "upload OK!\n");
         }
     }
     else {

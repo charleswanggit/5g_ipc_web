@@ -148,17 +148,30 @@
                 <div id="upgrade_page" class="page" style="display: block;">
                     <h2>安全</h2>
                     <ul>
-                        <li>
-                            <label>固件升级</label>
+                        <li style="display: none;">
+                            <h3>固件升级</h3>
                             <input id="file_upload" type="file">
+                            <button id="btn_upload"  disabled="true">upgrade</button>
+                        </li>
+                        <li style="display: none;">
+                            <label>固件升级</label>
+                            <form action="/api/form_upload" method="post" enctype="multipart/form-data">
+                                <input type="file" name="file1" /> </br>
+                                <button type="submit">upload</button>
+                            </form>
                         </li>
                         <li>
-                            <button id="btn_upload" disabled="true">upgrade</button>
+                            <h3>固件升级</h3>
+                            <input type="file" id="el1" style="display: none"/>
+                            <button id="el2">choose file...</button>
+                            <span>Selected file:</span> <span id="el4"></span> <br/>
+                            <button id="el5" style="margin: 0.5em 0;" disabled>upload file</button>
+                            <div id="el3" style="margin-top: 1em;"></div>
                         </li>
                     </ul>
                     <br></br>
                 </div>
-                <div id="status_page" class="page" style="display: block; clear: both;">
+                <div id="status_page" class="status_page">
                     <h2>5G网络接入显示</h2>
                     <ul>
                         <li><label>SIM卡状态 </label><span id="s_sim"></span></li>

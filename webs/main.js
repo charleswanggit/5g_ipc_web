@@ -213,6 +213,41 @@ E('file_upload').addEventListener('change', (event) => {
 });
 E('btn_upload').onclick = ev => UpLoad();
 
+var f; // selected file
+
+// When user clicks on a button, trigger file selection dialog
+document.getElementById('el2').onclick = function(ev) {
+    document.getElementById('el1').click();
+};
+
+document.getElementById('el5').onclick = function(ev) {
+    var r = new FileReader();
+    r.readAsArrayBuffer(f);
+    r.onload = function() {
+        E('el5').disabled = true;
+        ev.target.value = '';
+        document.getElementById('el3').innerText = 'Uploading...';
+        fetch('/api/upload?name=' + encodeURIComponent(f.name), {
+            method: 'POST',
+            body: r.result,}
+        ).then(response => response.text()
+        ).then(text =>{
+            document.getElementById('el3').innerText = 'Uploaded ' + r.result.byteLength + ' bytes  ';
+            alert(text);
+            E('el5').disabled = false;
+        });
+    };
+};
+
+// If user selected a file, read it into memory and trigger sendFileData()
+document.getElementById('el1').onchange = function(ev) {
+    f = ev.target.files[0];
+    if (!f) return;
+    document.getElementById('el4').innerText = f.name;
+    document.getElementById('el5').removeAttribute('disabled');
+};
+
+
 const Nav = props => html`
 <div style="background: #333; padding: 0.5em; color: #fff;">
   <div class="container d-flex">

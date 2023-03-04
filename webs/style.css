@@ -123,6 +123,12 @@ nav {
     /*padding: 20px;*/
 }
 
+.status_page {
+    text-align: center;
+    width: 100%;
+    display: block;
+    clear: both;
+}
 
 .test {
     clear: both;
