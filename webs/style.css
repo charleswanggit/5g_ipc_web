@@ -79,6 +79,9 @@ inset -2px -2px 3px rgba(0,0,0,0.6),
     float: left;
 }
 */
+input, select{
+    height: 30px;
+}
 
 /* nav menu */
 nav {
@@ -134,7 +137,7 @@ nav {
 .settings_page label,
 .settings_page span {
     display: inline-block;
-    width: 40%;
+    width: 200px;
 }
 .settings_page ul {
     width: 70%;
@@ -142,14 +145,24 @@ nav {
 .settings_page ul, .settings_page li {
     border: 1px solid #ccc;
 }
-
+.settings_page select, .settings_page input {
+    height: 30px;
+}
+/*
+.settings_page button {
+    margin-left: 200px;
+}
+*/
+.upgrade_page span{
+    width: auto;
+}
 .status_page {
     float: left;
     width: 50%;
 }
 .status_page label{
     display: inline-block;
-    width: 40%;
+    width: 200px;
     text-align: left;
 }
 .status_page ul {

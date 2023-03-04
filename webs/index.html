@@ -105,14 +105,13 @@
                             </select>
                         </li>
                         <li>
-                            <label>RTSP port</label>
+                            <span>RTSP port</span>
                             <input id="rtsp_port" type="text" maxlength="5">
                         </li>
                         <li>
                             <button id="btn1_save">Save</button>
                         </li>
                     </ul>
-                    <br>
                 </div>
                 <div id="settings_page2" class="page" style="display: block;">
                     <h2>4G/5G网络接入辅助</h2>
@@ -129,7 +128,6 @@
                             <button id="btn2_save" disabled="true">Save</button>
                         </li>
                     </ul>
-                    <br>
                 </div>
                 <div id="settings_page3" class="page" style="display: block;">
                     <h2>有线WAN口IP配置</h2>
@@ -142,9 +140,8 @@
                             <button id="btn3_save">Save</button>
                         </li>
                     </ul>
-                    <br>
                 </div>
-                <div id="upgrade_page" class="page" style="display: block;">
+                <div id="upgrade_page" class="upgrade_page" style="display: block;">
                     <h2>安全</h2>
                     <ul>
                         <li style="display: none;">
@@ -162,13 +159,12 @@
                         <li>
                             <h3>固件升级</h3>
                             <input type="file" id="el1" style="display: none" />
-                            <button id="el2">choose file...</button>
-                            <span>Selected file:</span> <span id="el4"></span> <br />
+                            <button id="el2" style="margin: 0.5em 0;">choose file...</button>
+                            <span>Selected file:</span> <span id="el4"></span><br>
                             <button id="el5" style="margin: 0.5em 0;" disabled>upload file</button>
                             <div id="el3" style="margin-top: 1em;"></div>
                         </li>
                     </ul>
-                    <br>
                 </div>
             </div>
             <div class="status_page">
