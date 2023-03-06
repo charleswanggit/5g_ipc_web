@@ -71,6 +71,49 @@ static const char* status_enum2strings(int n)
     return "Not recognized status";
 }
 
+typedef struct tag_timezone_info
+{
+    int index;
+    char localtimestr[24];
+}TimeZone_Info;
+const TimeZone_Info gAll_timezone_info[] =
+{
+    {0,  "Pacific/Kwajalein"},
+    {1,  "Pacific/Samoa"},
+    {2,  "US/Hawaii"},
+    {3,  "US/Alaska"},
+    {4,  "America/Los_Angeles"},
+    {5,  "US/Arizona"},
+    {6,  "America/Monterrey"},
+    {7,  "America/Bogota"},
+    {8,  "America/Caracas"},
+    {9,  "America/Asuncion"},
+    {10, "Canada/Newfoundland"},
+    {11, "America/Buenos_Aires"},
+    {12, "Atlantic/South_Georgia"},
+    {13, "Atlantic/Azores"},
+    {14, "Europe/London"},
+    {15, "Africa/Casablanca"},
+    {16, "Europe/Rome"},
+    {17, "Africa/Cairo"},
+    {18, "Asia/Baghdad"},
+    {19, "Asia/Tehran"},
+    {20, "Asia/Baku"},
+    {21, "Asia/Kabul"},
+    {22, "Asia/Tashkent"},
+    {23, "Asia/Kolkata"},
+    {24, "Asia/Katmandu"},
+    {25, "Asia/Almaty"},
+    {26, "Asia/Rangoon"},
+    {27, "Asia/Bangkok"},
+    {28, "Asia/Shanghai"},
+    {29, "Asia/Tokyo"},
+    {30, "Australia/Darwin"},
+    {31, "Australia/Canberra"},
+    {32, "Asia/Magadan"},
+    {33, "Pacific/Auckland"}
+};
+
 // 获取程序运行时间
 uint64_t utils_get_us()
 {
@@ -185,6 +228,10 @@ int web_apply_config()
                 char const *resolution_map[] = {"720p", "1080p", "1440p"};
                 value_str = resolution_map[value];
             }
+            else if (cmd == CONFIG_FRAME_RATE) {
+                char const *frame_rate_map[] = {"10fps", "15fps", "20fps", "25fps"};
+                value_str = frame_rate_map[value];
+            }
             else if (cmd == CONFIG_DAYNIGHT) {
                 char const *color_map[] = {"auto", "color", "whiteblack"};
                 value_str = color_map[value];
@@ -196,6 +243,9 @@ int web_apply_config()
             else if (cmd == CONFIG_NET) {
                 char const *net_map[] = {"auto", "4g lte", "5g nsa", "5g sa"};
                 value_str = net_map[value];
+            }
+            else if (cmd == CONFIG_TIMEZONE) {
+                value_str = gAll_timezone_info[value].localtimestr;
             }
             else if (cmd == CONFIG_SENSOR_HRZ_MIRROR ||
                      cmd == CONFIG_SENSOR_TILT_MIRROR ||

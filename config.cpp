@@ -29,6 +29,7 @@ static const config_t g_config_list[] =
 {
     {2, 6, ENUM_TYPE_AND_STRING(CONFIG_RTSP_BITRATE)}, //Mbps
     {0, 3, ENUM_TYPE_AND_STRING(CONFIG_RESOLUTION)},
+    {0, 4, ENUM_TYPE_AND_STRING(CONFIG_FRAME_RATE)},
     {0, 2, ENUM_TYPE_AND_STRING(CONFIG_SENSOR_HRZ_MIRROR)},
     {0, 2, ENUM_TYPE_AND_STRING(CONFIG_SENSOR_TILT_MIRROR)},
     {0, 3, ENUM_TYPE_AND_STRING(CONFIG_DAYNIGHT)},
@@ -38,10 +39,12 @@ static const config_t g_config_list[] =
     {0, 4, ENUM_TYPE_AND_STRING(CONFIG_NET)},
     //{554, 65536, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT)},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_RTSP_PORT), 1, "554"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_PING_IP), 1, "0.0.0.0"},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_IP_ADDRESS), 1, "0.0.0.0"},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_NTPSERVER1), 1, "ntp1.aliyun.com"},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_NTPSERVER2), 1, "time1.cloud.tencent.com"},
-    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_TIMEZONE), 1, "Asia/Shanghai"},
+    //{0, 0, ENUM_TYPE_AND_STRING(CONFIG_TIMEZONE), 1, "Asia/Shanghai"},
+    {28, 34, ENUM_TYPE_AND_STRING(CONFIG_TIMEZONE)},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_HEARTBEATIP), 1, "0"},
 
 };
@@ -129,12 +132,20 @@ int config_load()
     }
 
     Json::Value tmp;
+    Json::Value default_value;
     for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
         if (g_config_list[i].type == 0) {
-            tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_value));
+            default_value = Json::Value(g_config_list[i].default_value);
+            tmp = g_json_root.get(g_config_list[i].item_name, default_value);
+            if (tmp.type() != Json::intValue) {
+                tmp = default_value;
+            }
         }
         else {
             tmp = g_json_root.get(g_config_list[i].item_name, Json::Value(g_config_list[i].default_string));
+            if (tmp.type() != Json::stringValue) {
+                tmp = Json::Value(g_config_list[i].default_string);
+            }
         }
         g_json_root[g_config_list[i].item_name] = tmp;
     }

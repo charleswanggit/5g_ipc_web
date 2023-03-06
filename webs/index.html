@@ -61,6 +61,15 @@
                             </select>
                         </li>
                         <li>
+                            <span>帧率</span>
+                            <select id="select_frame_rate">
+                                <option>10fps</option>
+                                <option>15fps</option>
+                                <option>20fps</option>
+                                <option>25fps</option>
+                            </select>
+                        </li>
+                        <li>
                             <span id="horizontal_image">水平镜像</span>
                             <select id="select_horizontal_image">
                                 <option>关</option>
@@ -125,7 +134,11 @@
                                 <option>5G SA</option>
                             </select>
                         <li>
-                            <button id="btn2_save" disabled="true">Save</button>
+                        <li>
+                            <span>Ping IP</span>
+                            <input id="ping_ip" type="text" maxlength="16">
+                        </li>
+                            <button id="btn2_save">Save</button>
                         </li>
                     </ul>
                 </div>
@@ -138,6 +151,57 @@
                         </li>
                         <li>
                             <button id="btn3_save">Save</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="settings_page4" class="page" style="display: block;">
+                    <h2>时间设置</h2>
+                    <ul>
+                        <li>
+                            <span>Time Zone</span>
+                            <select id="select_time_zone">
+                                <option>Pacific/Kwajalein</option>
+                                <option>Pacific/Samoa</option>
+                                <option>US/Hawaii</option>
+                                <option>US/Alaska</option>
+                                <option>America/Los_Angeles</option>
+                                <option>US/Arizona</option>
+                                <option>America/Monterrey</option>
+                                <option>America/Bogota</option>
+                                <option>America/Caracas</option>
+                                <option>America/Asuncion</option>
+                                <option>Canada/Newfoundland</option>
+                                <option>America/Buenos_Aires</option>
+                                <option>Atlantic/South_Georgia</option>
+                                <option>Atlantic/Azores</option>
+                                <option>Europe/London</option>
+                                <option>Africa/Casablanca</option>
+                                <option>Europe/Rome</option>
+                                <option>Africa/Cairo</option>
+                                <option>Asia/Baghdad</option>
+                                <option>Asia/Tehran</option>
+                                <option>Asia/Baku</option>
+                                <option>Asia/Kabul</option>
+                                <option>Asia/Tashkent</option>
+                                <option>Asia/Kolkata</option>
+                                <option>Asia/Katmandu</option>
+                                <option>Asia/Almaty</option>
+                                <option>Asia/Rangoon</option>
+                                <option>Asia/Bangkok</option>
+                                <option>Asia/Shanghai</option>
+                                <option>Asia/Tokyo</option>
+                                <option>Australia/Darwin</option>
+                                <option>Australia/Canberra</option>
+                                <option>Asia/Magadan</option>
+                                <option>Pacific/Auckland</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label>NTP Server</label>
+                            <input id="ntp_server" type="text" maxlength="16">
+                        </li>
+                        <li>
+                            <button id="btn4_save">Save</button>
                         </li>
                     </ul>
                 </div>

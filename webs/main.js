@@ -98,6 +98,7 @@ async function GetConfigJSON(){
 
         E('select_bit_rate').selectedIndex=json.CONFIG_RTSP_BITRATE;
         E('select_resolution').selectedIndex=json.CONFIG_RESOLUTION;
+        E('select_frame_rate').selectedIndex=json.CONFIG_FRAME_RATE;
         E('select_horizontal_image').selectedIndex=json.CONFIG_SENSOR_HRZ_MIRROR;
         E('select_vertical_image').selectedIndex=json.CONFIG_SENSOR_TILT_MIRROR;
         E('select_color_mode').selectedIndex=json.CONFIG_DAYNIGHT;
@@ -106,7 +107,10 @@ async function GetConfigJSON(){
         E('select_ntp').selectedIndex=json.CONFIG_SYNCTIME_ENABLE;
         E('select_net').selectedIndex=json.CONFIG_NET;
         E('rtsp_port').value=json.CONFIG_RTSP_PORT;
+        E('ping_ip').value=json.CONFIG_PING_IP;
         E('ip_address').value=json.CONFIG_IP_ADDRESS;
+        E('ntp_server').value=json.CONFIG_NTPSERVER1;
+        E('select_time_zone').selectedIndex=json.CONFIG_TIMEZONE;
     }
     return;
     //return await response.json();
@@ -118,7 +122,7 @@ async function GetConfigJSON(){
 async function test_interface(){
     window.clearInterval(time1);
     GetDeviceInfo();
-    time1 = window.setInterval(GetDeviceInfo, 10000 * 1);
+    time1 = window.setInterval(GetDeviceInfo, 10000 * 3);
 
     //window.location.href="http://127.0.0.1:8000/web_root";
 
@@ -135,6 +139,7 @@ function ConfigJSON(){
     return JSON.stringify({
                           "CONFIG_RTSP_BITRATE":E('select_bit_rate').selectedIndex,
                           "CONFIG_RESOLUTION":E('select_resolution').selectedIndex,
+                          "CONFIG_FRAME_RATE":E('select_frame_rate').selectedIndex,
                           "CONFIG_SENSOR_HRZ_MIRROR":E('select_horizontal_image').selectedIndex,
                           "CONFIG_SENSOR_TILT_MIRROR":E('select_vertical_image').selectedIndex,
                           "CONFIG_DAYNIGHT":E('select_color_mode').selectedIndex,
@@ -143,13 +148,16 @@ function ConfigJSON(){
                           "CONFIG_SYNCTIME_ENABLE":E('select_ntp').selectedIndex,
                           "CONFIG_NET":E('select_net').selectedIndex,
                           "CONFIG_RTSP_PORT":E('rtsp_port').value,
-                          "CONFIG_IP_ADDRESS":E('ip_address').value
+                          "CONFIG_PING_IP":E('ping_ip').value,
+                          "CONFIG_IP_ADDRESS":E('ip_address').value,
+                          "CONFIG_NTPSERVER1":E('ntp_server').value,
+                          "CONFIG_TIMEZONE":E('select_time_zone').selectedIndex,
     });
 }
-async function ConfigSubmit(){
-    E('btn1_save').disabled = true;
+async function ConfigSubmit(id){
+    //E('btn1_save').disabled = true;
     //E('btn2_save').disabled = true;
-    E('btn3_save').disabled = true;
+    E(id).disabled = true;
     try {
         let response = await fetch('/api/submit', {method: 'POST', body:ConfigJSON()});
         let text = await response.text();
@@ -161,14 +169,15 @@ async function ConfigSubmit(){
         console.log('Request Failed', error);
         alert('set failed');
     }
-    E('btn1_save').disabled = false;
+    //E('btn1_save').disabled = false;
     //E('btn2_save').disabled = false;
-    E('btn3_save').disabled = false;
+    E(id).disabled = false;
 }
 
-E('btn1_save').onclick = ev => ConfigSubmit();
-E('btn2_save').onclick = ev => ConfigSubmit();
-E('btn3_save').onclick = ev => ConfigSubmit();
+E('btn1_save').onclick = ev => ConfigSubmit('btn1_save');
+E('btn2_save').onclick = ev => ConfigSubmit('btn2_save');
+E('btn3_save').onclick = ev => ConfigSubmit('btn3_save');
+E('btn4_save').onclick = ev => ConfigSubmit('btn4_save');
 
 async function UpLoad(){
     E('btn_upload').disabled = true;
