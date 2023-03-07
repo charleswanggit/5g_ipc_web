@@ -17,11 +17,12 @@
 int config_load();
 int config_reset();
 int config_set(CONFIG_ITEM item, int value);
+int config_set(CONFIG_ITEM item, std::string value);
 int config_get(CONFIG_ITEM item);
+std::string config_get_string(CONFIG_ITEM item);
 int config_get_item_type(CONFIG_ITEM item);
 std::string config_get_item_name(CONFIG_ITEM item);
 int config_set_string(CONFIG_ITEM item, std::string value);
-std::string config_get_string(CONFIG_ITEM item);
 //int config_save();
 
 int config_set_json(std::string json_str);

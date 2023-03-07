@@ -257,6 +257,50 @@ document.getElementById('el1').onchange = function(ev) {
 };
 
 
+const ChangePassword = function (props) {
+    const [user, setUser] = useState('');
+    const [pass, setPass] = useState('');
+    const [newpass, setNewPass] = useState('');
+    const login = () =>
+        fetch(
+              '/api/changepassword',
+              { headers: { Authorization: 'Basic ' + btoa(user + ':' + pass) } })
+            .then(r => {if(r.status == 403)alert('user or password wrong!');return r.json()})
+            .then(r => r && props.login(r))
+            .catch(err => err);
+    return html`
+<div class="rounded border" style="max-width: 480px; margin: 0 auto; margin-top: 5em; background: #eee; ">
+  <div style="padding: 2em; ">
+    <h1 style="color: #666;">IPC Web Settings Login </h1>
+    <div style="margin: 0.5em 0;">
+      <input type='text' placeholder='User' style="width: 100%;"
+        oninput=${ev => setUser(ev.target.value)} value=${user} />
+    </div>
+    <div style="margin: 0.5em 0;">
+      <input type="password" placeholder="Password" style="width: 100%;"
+        oninput=${ev => setPass(ev.target.value)} value=${pass}
+        onchange=${login} />
+    </div>
+    <div style="margin: 0.5em 0;">
+      <input type="password" placeholder="Password" style="width: 100%;"
+        oninput=${ev => setNewPass(ev.target.value)} value=${newpass}
+        onchange=${login} />
+    </div>
+    <div style="margin: 1em 0;">
+      <button class="btn" style="width: 100%; background: #8aa;"
+        disabled=${!user || !pass} onclick=${login}> Login </button>
+    </div>
+    <div style="margin: 1em 0;">
+      <button class="btn" style="width: 100%; background: #8aa;"
+        disabled=${!user || !pass} onclick=${login}> Login </button>
+    </div>
+    <div style="color: #777; margin-top: 2em;">
+      Valid logins: admin:pass0, user1:pass1, user2:pass2
+    </div>
+  </div>
+</div>`;
+};
+
 const Nav = props => html`
 <div style="background: #333; padding: 0.5em; color: #fff;">
   <div class="container d-flex">
@@ -277,11 +321,12 @@ const Nav = props => html`
 const Login = function (props) {
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
+    const change_pwd = () => {window.location.href='change_pwd.html';}
     const login = () =>
         fetch(
               '/api/login',
               { headers: { Authorization: 'Basic ' + btoa(user + ':' + pass) } })
-            .then(r => r.json())
+            .then(r => {if(r.status == 403)alert('user or password wrong!');return r.json()})
             .then(r => r && props.login(r))
             .catch(err => err);
     return html`
@@ -301,13 +346,19 @@ const Login = function (props) {
       <button class="btn" style="width: 100%; background: #8aa;"
         disabled=${!user || !pass} onclick=${login}> Login </button>
     </div>
+    <div style="display: none;">
+      <button style="width: 40%; "
+        onclick=${change_pwd}> Change Password </button>
+    </div>
+    <div style="margin: 1em 0;">
+      <a href='change_pwd.html'>Change Password</a>
+    </div>
     <div style="color: #777; margin-top: 2em;">
-      Valid logins: admin:pass0, user1:pass1, user2:pass2
+      Valid logins: admin:pass0
     </div>
   </div>
 </div>`;
 };
-
 
 const App = function () {
     const [user, setUser] = useState('');

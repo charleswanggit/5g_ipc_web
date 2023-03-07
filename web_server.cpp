@@ -196,6 +196,26 @@ static struct user_info *getuser(struct mg_http_message *hm) {
   return NULL;
 }
 
+static struct user_info *getuser_from_config(struct mg_http_message *hm) {
+  static char user[256], pass[256], token[256];
+  static struct user_info u = {user, pass, token};
+  mg_http_creds(hm, user, sizeof(user), pass, sizeof(pass));
+  if (user[0] != '\0' && pass[0] != '\0') {
+    // Both user and password are set, search by user/password
+      if (strcmp(user, config_get_string(CONFIG_PRIV_USR).c_str()) == 0 &&
+          strcmp(pass, config_get_string(CONFIG_PRIV_PASS).c_str()) == 0) {
+          return &u;
+      }
+  } else if (user[0] == '\0') {
+      strcpy(token, config_get_string(CONFIG_PRIV_TOKEN).c_str());
+    // Only password is set, search by token
+      if (strcmp(pass, config_get_string(CONFIG_PRIV_TOKEN).c_str()) == 0) {
+          return &u;
+      }
+  }
+  return NULL;
+}
+
 static void dir_fn(struct mg_connection *c, int ev, void *ev_data, void *fn_data) {
     struct mg_http_serve_opts opts = {.root_dir = s_root_dir};   // Serve local dir
     //struct mg_http_serve_opts opts = {.root_dir = "./HTML_Study"};   // Serve local dir
@@ -298,8 +318,7 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
         //MG_INFO(("http: \n%s\n", hm->message.ptr));
         //printf("body:\n%s\n", hm->body.ptr);
 //用户认证
-#if 1
-        struct user_info *u = getuser(hm);
+        struct user_info *u = getuser_from_config(hm);
         if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
             MG_INFO(("zsppp denied ##############################\n"));
             // All URIs starting with /api/ must be authenticated
@@ -316,7 +335,18 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
                           "{%Q:%Q,%Q:%Q}\n", "user", u->name, "token", u->token);
             return;
         }
-#endif
+        else if (mg_http_match_uri(hm, "/api/changepassword")) {
+            if ( 0 < hm->body.len && hm->body.len < 64) {
+                char tmp[64] = {0};
+                mg_base64_decode(hm->body.ptr, hm->body.len, tmp);
+                printf("password:\n%s\n", tmp);
+                config_set(CONFIG_PRIV_PASS, tmp);
+                mg_http_reply(c, 200, "", "set password OK!\n");
+            }
+            else {
+                mg_http_reply(c, 404, "", "set password failed!\n");
+            }
+        }
 
         if (mg_http_match_uri(hm, "/api/device_info")) {
             //MG_INFO(("zsppp test device_info ##############################\n"));
@@ -350,6 +380,7 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
                 mg_http_reply(c, 403, "", "set error!\n");
             }
         }
+#if 0
         else if (mg_http_match_uri(hm, "/api/upgrade")) {
             char *file_ptr = (char *)malloc(hm->body.len * 2);
             int file_len = 0;
@@ -363,7 +394,7 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
             free(file_ptr);
             g_config_cb(CONFIG_UPGRADE, s_upgrade_path);
         }
-        if (mg_http_match_uri(hm, "/api/form_upload")) {
+        else if (mg_http_match_uri(hm, "/api/form_upload")) {
             struct mg_http_part part;
             size_t ofs = 0;
             while ((ofs = mg_http_next_multipart(hm->body, ofs, &part)) > 0) {
@@ -375,6 +406,7 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
             }
             mg_http_reply(c, 200, "", "upload OK!");
         }
+#endif
         else if (mg_http_match_uri(hm, "/api/f1")) {
             mg_http_reply(c, 200, "Content-Type: application/json\r\n", "{%Q:%ld}\n",
                           "result", utils_get_us()/1000000);
@@ -391,8 +423,6 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
                               "result", num1 + num2);
                 MG_INFO(("sum %lf + %lf = %lf\n", num1, num2, num1+num2));
             }
-        }
-        else if (mg_http_match_uri(hm, "/api/param")) {
         }
         else {
             //MG_INFO(("zsppp unknow uri\n"));

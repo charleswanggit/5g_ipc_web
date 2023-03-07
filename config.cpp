@@ -47,6 +47,9 @@ static const config_t g_config_list[] =
     {28, 34, ENUM_TYPE_AND_STRING(CONFIG_TIMEZONE)},
     {0, 0, ENUM_TYPE_AND_STRING(CONFIG_HEARTBEATIP), 1, "0"},
 
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_PRIV_USR), 1, "admin"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_PRIV_PASS), 1, "pass0"},
+    {0, 0, ENUM_TYPE_AND_STRING(CONFIG_PRIV_TOKEN), 1, "admin_token"},
 };
 
 //static const char g_config_path[] = "/etc/config/sc1a03_config.json";
@@ -182,6 +185,17 @@ int config_set(CONFIG_ITEM item, int value)
     return config_save();
 }
 
+int config_set(CONFIG_ITEM item, std::string value)
+{
+    for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
+        if (item == g_config_list[i].item) {
+            g_json_root[g_config_list[i].item_name] = value;
+            break;
+        }
+    }
+    return config_save();
+}
+
 int config_get(CONFIG_ITEM item)
 {
 #if 0
@@ -200,11 +214,21 @@ int config_get(CONFIG_ITEM item)
 
 int config_get_item_type(CONFIG_ITEM item)
 {
-    return g_config_list[item].type;
+    for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
+        if (item == g_config_list[i].item) {
+            return g_config_list[item].type;
+        }
+    }
+    return -1;
 }
 std::string config_get_item_name(CONFIG_ITEM item)
 {
-    return g_config_list[item].item_name;
+    for (int i = 0; i < (int)(sizeof(g_config_list) / sizeof(g_config_list[0])); i++) {
+        if (item == g_config_list[i].item) {
+            return g_config_list[item].item_name;
+        }
+    }
+    return "";
 }
 
 

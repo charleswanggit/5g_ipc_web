@@ -46,8 +46,13 @@ typedef enum
     CONFIG_NTPSERVER2,
     CONFIG_TIMEZONE,
     CONFIG_HEARTBEATIP,
-    CONFIG_END, // 以上是配置信息，以下是用于事件传递
+    CONFIG_END,
+    // 以上是配置信息，以下是用于事件传递
     CONFIG_UPGRADE,
+    // web_server专用枚举
+    CONFIG_PRIV_USR = 100,
+    CONFIG_PRIV_PASS,
+    CONFIG_PRIV_TOKEN,
 }CONFIG_ITEM;
 
 typedef enum
