@@ -499,6 +499,7 @@ int web_deinit()
         delete g_thread;
         g_thread = nullptr;
     }
+    config_save();
     return 0;
 }
 

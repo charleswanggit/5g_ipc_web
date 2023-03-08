@@ -7,7 +7,7 @@
 	"CONFIG_NTPSERVER1" : "ntp1.aliyun.com",
 	"CONFIG_NTPSERVER2" : "time1.cloud.tencent.com",
 	"CONFIG_PING_IP" : "0.0.0.0",
-	"CONFIG_PRIV_PASS" : "xx123",
+	"CONFIG_PRIV_PASS" : "pass0",
 	"CONFIG_PRIV_TOKEN" : "admin_token",
 	"CONFIG_PRIV_USR" : "admin",
 	"CONFIG_RECORD_ENABLE" : 0,

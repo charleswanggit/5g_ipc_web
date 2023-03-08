@@ -56,7 +56,7 @@ static const config_t g_config_list[] =
 static const char g_config_path[] = "./config.json";
 Json::Value g_json_root;
 
-static int config_save()
+int config_save()
 {
     //TODO 备份配置文件
     std::ofstream outfile;

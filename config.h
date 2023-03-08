@@ -15,6 +15,7 @@
 //#include <vector>
 
 int config_load();
+int config_save();
 int config_reset();
 int config_set(CONFIG_ITEM item, int value);
 int config_set(CONFIG_ITEM item, std::string value);
