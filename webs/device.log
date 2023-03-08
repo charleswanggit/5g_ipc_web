@@ -1,0 +1,42 @@
+typedef struct tag_timezone_info
+{
+	int index;
+	char localtimestr[24];
+}TimeZone_Info;
+const TimeZone_Info gAll_timezone_info[MAX_TIMEZONE_COUNT] = 
+{
+	{0,  "Pacific/Kwajalein"},
+	{1,  "Pacific/Samoa"},
+	{2,  "US/Hawaii"},
+	{3,  "US/Alaska"},
+	{4,  "America/Los_Angeles"},
+	{5,  "US/Arizona"},
+	{6,  "America/Monterrey"},
+	{7,  "America/Bogota"},
+	{8,  "America/Caracas"},
+	{9,  "America/Asuncion"},
+	{10, "Canada/Newfoundland"},
+	{11, "America/Buenos_Aires"},
+	{12, "Atlantic/South_Georgia"},
+	{13, "Atlantic/Azores"},
+	{14, "Europe/London"},
+	{15, "Africa/Casablanca"},
+	{16, "Europe/Rome"},
+	{17, "Africa/Cairo"},
+	{18, "Asia/Baghdad"},
+	{19, "Asia/Tehran"},
+	{20, "Asia/Baku"},
+	{21, "Asia/Kabul"},
+	{22, "Asia/Tashkent"},
+	{23, "Asia/Kolkata"},
+	{24, "Asia/Katmandu"},
+	{25, "Asia/Almaty"},
+	{26, "Asia/Rangoon"},
+	{27, "Asia/Bangkok"},
+	{28, "Asia/Shanghai"},
+	{29, "Asia/Tokyo"},
+	{30, "Australia/Darwin"},
+	{31, "Australia/Canberra"},
+	{32, "Asia/Magadan"},
+	{33, "Pacific/Auckland"}
+};

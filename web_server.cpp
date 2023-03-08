@@ -207,6 +207,7 @@ static struct user_info *getuser_from_config(struct mg_http_message *hm) {
           return &u;
       }
   } else if (user[0] == '\0') {
+      strcpy(user, config_get_string(CONFIG_PRIV_USR).c_str());
       strcpy(token, config_get_string(CONFIG_PRIV_TOKEN).c_str());
     // Only password is set, search by token
       if (strcmp(pass, config_get_string(CONFIG_PRIV_TOKEN).c_str()) == 0) {
@@ -315,14 +316,18 @@ static void web_settings_fn(struct mg_connection *c, int ev, void *ev_data, void
 
     //MG_INFO(("ev: %d, %s\n", ev, mg_ev_enum2strings(ev)));
     if (ev == MG_EV_HTTP_MSG) {
-        //MG_INFO(("http: \n%s\n", hm->message.ptr));
-        //printf("body:\n%s\n", hm->body.ptr);
+        MG_INFO(("http: \n%s\n", hm->message.ptr));
+        printf("body:\n%s\n", hm->body.ptr);
 //用户认证
         struct user_info *u = getuser_from_config(hm);
         if (u == NULL && mg_http_match_uri(hm, "/api/#")) {
             MG_INFO(("zsppp denied ##############################\n"));
             // All URIs starting with /api/ must be authenticated
             mg_http_reply(c, 403, "", "Denied\n");
+
+            //累计登录请求次数，进入1分钟登录冷却
+            if (mg_http_match_uri(hm, "/api/login")) {
+            }
             return;
         }
         else if (mg_http_match_uri(hm, "/api/data")) {
